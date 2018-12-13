@@ -30,33 +30,20 @@
 (deftemplate caja
     (slot espacioLibre (type NUMBER) (default 200))
     (slot tipo (type SYMBOL))
-    (slot estado (type SYMBOL) (allowed-values abierta cerrada utilizada) (default abierta))
 	(multislot listaProductos (default create$) )
 )
 
-
-
-(defrule initCaja 
-	?prod <- (producto (nombre ?nom) (tipo ?t) (envuelto Si) (volumen ?v) (empaquetado No) )
-	(not (exists  (caja (espacioLibre ?es) (tipo ?t) (estado abierta))))
-=>
-    (assert (caja (tipo ?t)))
-    (printout t "Abrimos caja de tipo " ?t crlf)
-)
-
 (defrule abrirCaja 
-    ?caja_ <- (caja (espacioLibre ?es) (tipo ?t) (estado abierta))
-	
-    (exists (producto (nombre ?nom) (tipo ?t) (envuelto Si) (volumen ?v) (empaquetado No)))
-    (forall (producto (nombre ?nom) (tipo ?t) (envuelto Si) (volumen ?v) (empaquetado No)) (test(> ?v ?es)))
+	(declare (salience 1)) 
+	?producto_ <- (producto (nombre ?nom) (tipo ?t) (envuelto Si) (volumen ?v) (empaquetado No))
 =>
-    (modify ?caja_ (estado utilizada))
     (assert (caja (tipo ?t)))
     (printout t "Abrimos caja de tipo " ?t crlf)
 )
 
 (defrule empaquetar
-    ?caja_ <- (caja (espacioLibre ?es) (tipo ?t) (estado abierta) (listaProductos $?listaProductos))
+	(declare (salience 2))
+    ?caja_ <- (caja (espacioLibre ?es) (tipo ?t) (listaProductos $?listaProductos))
     ?prod <- (producto (nombre ?nom) (tipo ?t) (envuelto Si) (volumen ?v) (empaquetado No) )
     (test (< ?v ?es)) ;; solo ejecuto regla si cumple test
 =>
