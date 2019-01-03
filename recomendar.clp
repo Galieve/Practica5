@@ -4,7 +4,7 @@
 
 (defrule recomendarGastoInit
 	?perfil_ <- (perfil (id ?id_) (gastoTotal ?gt) (gastoMaximo ?gm) (aplicacionesInstaladas $?apps_))
-	?recomendacion_ <- (recomendacion (id ?id_) (ready No))
+	?recomendacion_ <- (recomendacion (id ?id_) (precioMaximo -1) (ready No))
 	(test(< (length$ $?apps_) 30))
 	
 =>
@@ -13,7 +13,7 @@
 
 (defrule recomendarGastoTotalCero
 	?perfil_ <- (perfil (id ?id_) (gastoTotal ?gt) (gastoMaximo ?gm) (aplicacionesInstaladas $?apps_))
-	?recomendacion_ <- (recomendacion (id ?id) (ready No))
+	?recomendacion_ <- (recomendacion (id ?id) (precioMaximo -1) (ready No))
 	(test(eq ?gt 0))
 	(test(>= (length$ $?apps_) 30))
 =>
@@ -22,7 +22,7 @@
 
 (defrule recomendarGastoCompulsivo
 	?perfil_ <- (perfil (id ?id_) (gastoTotal ?gt) (gastoMaximo ?gm) (aplicacionesInstaladas $?apps_))
-	?recomendacion_ <- (recomendacion (id ?id) (ready No))
+	?recomendacion_ <- (recomendacion (id ?id) (precioMaximo -1) (ready No))
 	(test(neq ?gt 0))
 	(test(>= (length$ $?apps_) 30))
 	(test(>= (/ ?gt (length$ $?apps_)) 0.63))
@@ -33,7 +33,7 @@
 
 (defrule recomendarGastoNoCompulsivo
 	?perfil_ <- (perfil (id ?id_) (gastoTotal ?gt) (gastoMaximo ?gm) (aplicacionesInstaladas $?apps_))
-	?recomendacion_ <- (recomendacion (id ?id) (ready No))
+	?recomendacion_ <- (recomendacion (id ?id) (precioMaximo -1) (ready No))
 	(test(neq ?gt 0))
 	(test(>= (length$ $?apps_) 30))
 	(test(<  (/ ?gt (length$ $?apps_)) 0.63))
@@ -45,7 +45,7 @@
 
 (defrule recomendarEdadPerfil
 	?perfil_ <- (perfil (id ?id_) (edad ?ed_))
-	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
+	?recomendacion_ <- (recomendacion (id ?id) (ready No) (edadApp -1) )
 	?peticion_ <- (peticion (id ?id_) (edadDestinatario ?edPet_)) 
 	(test(eq ?edPet_ -1))
 =>
@@ -53,7 +53,7 @@
 )
 
 (defrule recomendarEdadPeticion
-	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
+	?recomendacion_ <- (recomendacion (id ?id) (ready No) (edadApp -1))
 	?peticion_ <- (peticion (id ?id_) (edadDestinatario ?edPet_)) 
 	(test(neq ?edPet_ -1))
 =>
@@ -63,7 +63,7 @@
 ;---------------------------Reglas de Espacio--------------------------------
 
 (defrule recomendarEspacioPedido
-	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
+	?recomendacion_ <- (recomendacion (id ?id) (ready No) (espacio null) )
 	?peticion_ <- (peticion (id ?id_) (espacioMax ?em_)) 
 	(test(neq ?em_ null))
 =>
@@ -72,7 +72,7 @@
 
 (defrule recomendarPocoEspacio
 	?perfil_ <- (perfil (id ?id_) (version ?vers_) (aplicacionesInstaladas $?apps_))
-	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
+	?recomendacion_ <- (recomendacion (id ?id) (ready No) (espacio null))
 	?peticion_ <- (peticion (id ?id_) (espacioMax ?em_)) 
 	(test(eq ?em_ null))
 	(test (or (and (< (str-compare ?vers_ "6.0") 0) (>= (length$ $?apps_) 30)) (and (>= (str-compare ?vers_ "6.0") 0) (>= (length$ $?apps_) 100))))
@@ -82,7 +82,7 @@
 
 (defrule recomendarMedioEspacio
 	?perfil_ <- (perfil (id ?id_) (version ?vers_) (aplicacionesInstaladas $?apps_))
-	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
+	?recomendacion_ <- (recomendacion (id ?id) (ready No) (espacio null) )
 	?peticion_ <- (peticion (id ?id_) (espacioMax ?em_)) 
 	(test(eq ?em_ null))
 	(test(>= (str-compare ?vers_ "6.0") 0) )
@@ -95,7 +95,7 @@
 
 (defrule recomendarPesadoEspacio
 	?perfil_ <- (perfil (id ?id_) (version ?vers_) (aplicacionesInstaladas $?apps_))
-	?recomendacion_ <- (recomendacion (id ?id) (ready No) (espacio null) )
+	?recomendacion_ <- (recomendacion (id ?id) (ready No) (espacio null))
 	?peticion_ <- (peticion (id ?id_) (espacioMax ?em_)) 
 	(test(eq ?em_ null))
 	(test(< (length$ $?apps_) 30))
