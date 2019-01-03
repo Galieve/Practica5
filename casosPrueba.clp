@@ -29,7 +29,7 @@
 	
 	(perfil (id "nadie") (edad 12) (sexo hombre) (version "3.0") 
 	;(aplicacionesInstaladas 1 2)
-	;(genero Games Education)
+	(genero Games Education ArtAndDesign)
 	(gastoTotal 10) (gastoMaximo 10)
 	)
 )

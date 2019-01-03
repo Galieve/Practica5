@@ -1,20 +1,20 @@
 (deffacts perfiles_init
 	(perfil (id "alguien") (edad 34) (sexo otro) (version "6.0") 
 	;(aplicacionesInstaladas 1 2 "350 Diy Room Decor Ideas")
-	;(genero Comics)
+	(genero Comics)
 	(gastoTotal 0) (gastoMaximo 0)
 	)
 	
 	(perfil (id "nadie") (edad 12) (sexo hombre) (version "3.0") 
 	;(aplicacionesInstaladas 1 2)
-	;(genero Games Education)
+	(genero Games Education ArtAndDesign)
 	(gastoTotal 10) (gastoMaximo 10)
 	)
 )
 
 (deffacts peticion_init
 	(peticion (id "nadie")
-	;(generoPet Games Casual)
+	;(genero Games Casual)
 	(edadDestinatario -1)
 	(prioridad descargas)
 	(espacioMax ligera)

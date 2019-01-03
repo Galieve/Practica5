@@ -194,6 +194,7 @@
 	(test(>= ?valoracion_ 3.5))
 	(test(<= ?precio_ ?precioMax_))
 	(test (member$ ?generoApp_ ?genero_))
+	
 	(test(or	
 		(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 3000000))		
 		(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 15000000))	
@@ -222,9 +223,8 @@
 	(forall (appRecomendada (nombre ?nombre_2) (id ?id_) )
 	(test (neq ?nombre_2 ?nombre_))
 	)
-
 =>
-	(modify ?appRecomendada_ (nombre ?nombre_))
+	(modify ?appRecomendada_ (nombre ?nombreApp_))
 	
 )
 
