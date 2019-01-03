@@ -95,7 +95,7 @@
 
 (defrule recomendarPesadoEspacio
 	?perfil_ <- (perfil (id ?id_) (version ?vers_) (aplicacionesInstaladas $?apps_))
-	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
+	?recomendacion_ <- (recomendacion (id ?id) (ready No) (espacio null) )
 	?peticion_ <- (peticion (id ?id_) (espacioMax ?em_)) 
 	(test(eq ?em_ null))
 	(test(< (length$ $?apps_) 30))
@@ -112,6 +112,7 @@
 	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
 	?peticion_ <- (peticion (id ?id_) (genero $?genP_)) 
 	(test(neq (length$ $?genP_) 0))
+	(test(eq (length$ $?generoRec_) 0))
 	
 =>
 	(modify ?recomendacion_ (genero ?genP_))
@@ -123,6 +124,8 @@
 	?peticion_ <- (peticion (id ?id_) (genero $?genP_)) 
 	(test(eq  (length$ $?genP_) 0))
 	(test(>=  (length$ $?apps_) 30))
+	(test(eq (length$ $?generoRec_) 0))
+	
 =>
 	(modify ?recomendacion_ (genero ?genPerf_))
 )
@@ -134,6 +137,7 @@
 	?peticion_ <- (peticion (id ?id_) (genero $?genP_)) 
 	(test(eq (length$ $?genP_) 0))
 	(test(<  (length$ $?apps_) 30))
+	(test(eq (length$ $?generoRec_) 0))
 =>
 	(modify ?recomendacion_ (genero ?generoRec_ Action Adventure Arcade ArtAndDesign AutoAndVehicles Beauty Board BooksAndReference
 		Business Card Casino Casual Comics Communication Dating Education Educational Entertainment Events Finance FoodAndDrink 
@@ -193,8 +197,7 @@
 	(test(>= ?reviews_ 5000))
 	(test(>= ?valoracion_ 3.5))
 	(test(<= ?precio_ ?precioMax_))
-	(test (member$ ?generoApp_ ?genero_))
-	
+	(test (neq (member$ ?generoApp_ ?genero_) FALSE))
 	(test(or	
 		(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 3000000))		
 		(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 15000000))	
@@ -223,7 +226,9 @@
 	(forall (appRecomendada (nombre ?nombre_2) (id ?id_) )
 	(test (neq ?nombre_2 ?nombre_))
 	)
+	
 =>
+	(printout t ?generoApp_ " y el genero recomendado es: " ?genero_ crlf)
 	(modify ?appRecomendada_ (nombre ?nombreApp_))
 	
 )

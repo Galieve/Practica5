@@ -25,5 +25,10 @@
 	(id "nadie")
 )
 
-
+(defrule x
+(declare (salience -5555))
+ ?p <- (perfil (id ?id_) (genero $?g))
+=>
+	(printout t ?id_ "=" (length$ $?g) crlf)
+)
 ;
