@@ -204,7 +204,6 @@
 		(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 15000000))	
 		(eq ?espacio_ pesada)
 	))
-	
 	(forall (aplicacion (nombre ?nombreApp_2&:(neq ?nombreApp_2 ?nombreApp_)) (valoracion ?valoracion_2) (espacio ?espacioApp_2) (descargas ?descargasApp_2) (genero ?generoApp_2) (edad ?edadApp_2) )
 		(test (>= ?edad_ (conversionEdad_Num ?edadApp_)))
 		(test (>= ?descargasApp_ 50000))
