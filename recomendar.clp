@@ -1,11 +1,10 @@
-(defmodule RECOMENDAR (import TEMPLATES ?ALL))
 ;NUMapps_ antes de perfil bueno = 30!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 ;----------------------Reglas de gasto------------------------
 
 (defrule recomendarGastoInit
-	?perfil_ <- (perfil (id ?id_) (gastoTotal ?gt) (gastoMaximo ?gm) (aplicacionesInstaladas ?apps_))
-	?recomendacion_ <- (recomendacion (id ?id_) )
+	?perfil_ <- (perfil (id ?id_) (gastoTotal ?gt) (gastoMaximo ?gm) (aplicacionesInstaladas $?apps_))
+	?recomendacion_ <- (recomendacion (id ?id_) (ready No))
 	(test(< (length$ $?apps_) 30))
 	
 =>
@@ -13,8 +12,8 @@
 )
 
 (defrule recomendarGastoTotalCero
-	?perfil_ <- (perfil (id ?id_) (gastoTotal ?gt) (gastoMaximo ?gm) (aplicacionesInstaladas ?apps_))
-	?recomendacion_ <- (recomendacion (id ?id) )
+	?perfil_ <- (perfil (id ?id_) (gastoTotal ?gt) (gastoMaximo ?gm) (aplicacionesInstaladas $?apps_))
+	?recomendacion_ <- (recomendacion (id ?id) (ready No))
 	(test(eq ?gt 0))
 	(test(>= (length$ $?apps_) 30))
 =>
@@ -22,8 +21,8 @@
 )
 
 (defrule recomendarGastoCompulsivo
-	?perfil_ <- (perfil (id ?id_) (gastoTotal ?gt) (gastoMaximo ?gm) (aplicacionesInstaladas ?apps_))
-	?recomendacion_ <- (recomendacion (id ?id) )
+	?perfil_ <- (perfil (id ?id_) (gastoTotal ?gt) (gastoMaximo ?gm) (aplicacionesInstaladas $?apps_))
+	?recomendacion_ <- (recomendacion (id ?id) (ready No))
 	(test(neq ?gt 0))
 	(test(>= (length$ $?apps_) 30))
 	(test(>= (/ ?gt (length$ $?apps_)) 0.63))
@@ -33,8 +32,8 @@
 
 
 (defrule recomendarGastoNoCompulsivo
-	?perfil_ <- (perfil (id ?id_) (gastoTotal ?gt) (gastoMaximo ?gm) (aplicacionesInstaladas ?apps_))
-	?recomendacion_ <- (recomendacion (id ?id) )
+	?perfil_ <- (perfil (id ?id_) (gastoTotal ?gt) (gastoMaximo ?gm) (aplicacionesInstaladas $?apps_))
+	?recomendacion_ <- (recomendacion (id ?id) (ready No))
 	(test(neq ?gt 0))
 	(test(>= (length$ $?apps_) 30))
 	(test(<  (/ ?gt (length$ $?apps_)) 0.63))
@@ -46,7 +45,7 @@
 
 (defrule recomendarEdadPerfil
 	?perfil_ <- (perfil (id ?id_) (edad ?ed_))
-	?recomendacion_ <- (recomendacion (id ?id) )
+	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
 	?peticion_ <- (peticion (id ?id_) (edadDestinatario ?edPet_)) 
 	(test(eq ?edPet_ -1))
 =>
@@ -54,7 +53,7 @@
 )
 
 (defrule recomendarEdadPeticion
-	?recomendacion_ <- (recomendacion (id ?id) )
+	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
 	?peticion_ <- (peticion (id ?id_) (edadDestinatario ?edPet_)) 
 	(test(neq ?edPet_ -1))
 =>
@@ -64,7 +63,7 @@
 ;---------------------------Reglas de Espacio--------------------------------
 
 (defrule recomendarEspacioPedido
-	?recomendacion_ <- (recomendacion (id ?id))
+	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
 	?peticion_ <- (peticion (id ?id_) (espacioMax ?em_)) 
 	(test(neq ?em_ null))
 =>
@@ -72,8 +71,8 @@
 )
 
 (defrule recomendarPocoEspacio
-	?perfil_ <- (perfil (id ?id_) (version ?vers_) (aplicacionesInstaladas ?apps_))
-	?recomendacion_ <- (recomendacion (id ?id))
+	?perfil_ <- (perfil (id ?id_) (version ?vers_) (aplicacionesInstaladas $?apps_))
+	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
 	?peticion_ <- (peticion (id ?id_) (espacioMax ?em_)) 
 	(test(eq ?em_ null))
 	(test (or (and (< (str-compare ?vers_ "6.0") 0) (>= (length$ $?apps_) 30)) (and (>= (str-compare ?vers_ "6.0") 0) (>= (length$ $?apps_) 100))))
@@ -82,8 +81,8 @@
 )
 
 (defrule recomendarMedioEspacio
-	?perfil_ <- (perfil (id ?id_) (version ?vers_) (aplicacionesInstaladas ?apps_))
-	?recomendacion_ <- (recomendacion (id ?id))
+	?perfil_ <- (perfil (id ?id_) (version ?vers_) (aplicacionesInstaladas $?apps_))
+	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
 	?peticion_ <- (peticion (id ?id_) (espacioMax ?em_)) 
 	(test(eq ?em_ null))
 	(test(>= (str-compare ?vers_ "6.0") 0) )
@@ -95,8 +94,8 @@
 )
 
 (defrule recomendarPesadoEspacio
-	?perfil_ <- (perfil (id ?id_) (version ?vers_) (aplicacionesInstaladas ?apps_))
-	?recomendacion_ <- (recomendacion (id ?id))
+	?perfil_ <- (perfil (id ?id_) (version ?vers_) (aplicacionesInstaladas $?apps_))
+	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
 	?peticion_ <- (peticion (id ?id_) (espacioMax ?em_)) 
 	(test(eq ?em_ null))
 	(test(< (length$ $?apps_) 30))
@@ -110,8 +109,8 @@
 ;--------------------------Reglas de Género---------------------------------
 
 (defrule recomendarGeneroPeticionNoNula
-	?recomendacion_ <- (recomendacion (id ?id))
-	?peticion_ <- (peticion (id ?id_) (generoPet ?genP_)) 
+	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
+	?peticion_ <- (peticion (id ?id_) (genero $?genP_)) 
 	(test(neq (length$ $?genP_) 0))
 	
 =>
@@ -119,9 +118,9 @@
 )
 
 (defrule recomendarGeneroPeticionNulaMuchasapps_
-	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas ?apps_) (genero ?genPerf_))
-	?recomendacion_ <- (recomendacion (id ?id))
-	?peticion_ <- (peticion (id ?id_) (generoPet ?genP_)) 
+	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_))
+	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
+	?peticion_ <- (peticion (id ?id_) (genero $?genP_)) 
 	(test(eq  (length$ $?genP_) 0))
 	(test(>=  (length$ $?apps_) 30))
 =>
@@ -130,9 +129,9 @@
 
 
 (defrule recomendarGeneroPeticionNulaPocasapps_
-	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas ?apps_) (genero ?genPerf_))
-	?recomendacion_ <- (recomendacion (id ?id) (genero $?generoRec_))
-	?peticion_ <- (peticion (id ?id_) (generoPet ?genP_)) 
+	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_))
+	?recomendacion_ <- (recomendacion (id ?id) (genero $?generoRec_) (ready No))
+	?peticion_ <- (peticion (id ?id_) (genero $?genP_)) 
 	(test(eq (length$ $?genP_) 0))
 	(test(<  (length$ $?apps_) 30))
 =>
@@ -151,7 +150,7 @@
 
 (defrule setReady
 	(declare (salience -11))
-	?recomendacion_ <- (recomendacion (id ?id_) (genero ?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_) (ready No))
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_) (ready No))
 	(test(neq (length$ $?genero_) 0))
 	(test(neq ?edad_ -1))
 	(test(neq ?espacio_ null))
@@ -179,22 +178,22 @@
 )
 
 (defrule recomendarDescargas
-	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas ?aplicacionesInstaladas_))
+	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?aplicacionesInstaladas_))
 	?peticion_ <- (peticion (id ?id_) (prioridad descargas))
-	?recomendacion_ <- (recomendacion (id ?id_) (genero ?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_) (ready Si))
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_) (ready Si))
 	?appRecomendada_ <- (appRecomendada (id ?id_) (nombre ?nombre_) (posPodium ?posPodium_))
 	(test(eq ?nombre_ ""))
 	?aplicacion_ <- (aplicacion (nombre ?nombreApp_) (valoracion ?valoracion_) (reviews ?reviews_) (espacio ?espacioApp_) (descargas ?descargasApp_)
 		(precio ?precio_) (ultimaActualizacion ?ultimaActualizacion_) (androidVersion ?androidVersion_) (genero ?generoApp_) (edad ?edadApp_))
 	
-	(test (not (member$ ?nombreApp_ $?aplicacionesInstaladas_)))
+	(test (not (member$ ?nombreApp_ ?aplicacionesInstaladas_)))
 	
 	(test(>= ?edad_ (conversionEdad_Num ?edadApp_)))
 	(test(>= ?descargasApp_ 50000))
 	(test(>= ?reviews_ 5000))
 	(test(>= ?valoracion_ 3.5))
 	(test(<= ?precio_ ?precioMax_))
-	(test (member$ ?generoApp_ $?genero_))
+	(test (member$ ?generoApp_ ?genero_))
 	(test(or	
 		(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 3000000))		
 		(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 15000000))	
@@ -208,7 +207,7 @@
 		(test (>= ?reviews_ 5000))
 		(test (>= ?valoracion_ 3.5))
 		(test (<= ?precio_ ?precioMax_))
-		(test (member$ ?generoApp_ $?genero_))
+		(test (member$ ?generoApp_ ?genero_))
 		(test (or 
 			(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 3000000))	
 			(and (eq ?espacio_ medio ) (<= ?espacioApp_ 15000000))	
@@ -232,22 +231,22 @@
 
 
 (defrule recomendarValoracion
-	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas ?aplicacionesInstaladas_))
+	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?aplicacionesInstaladas_))
 	?peticion_ <- (peticion (id ?id_) (prioridad valoracion))
-	?recomendacion_ <- (recomendacion (id ?id_) (genero ?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_) (ready Si))
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_) (ready Si))
 	?appRecomendada_ <- (appRecomendada (id ?id_) (nombre ?nombre_) (posPodium ?posPodium_))
 	(test(eq ?nombre_ ""))
 	?aplicacion_ <- (aplicacion (nombre ?nombreApp_) (valoracion ?valoracion_) (reviews ?reviews_) (espacio ?espacioApp_) (descargas ?descargasApp_)
 		(precio ?precio_) (ultimaActualizacion ?ultimaActualizacion_) (androidVersion ?androidVersion_) (genero ?generoApp_) (edad ?edadApp_))
 	
-	(test (not (member$ ?nombreApp_ $?aplicacionesInstaladas_)))
+	(test (not (member$ ?nombreApp_ ?aplicacionesInstaladas_)))
 	
 	(test(>= ?edad_ (conversionEdad_Num ?edadApp_)))
 	(test(>= ?descargasApp_ 50000))
 	(test(>= ?reviews_ 5000))
 	(test(>= ?valoracion_ 3.5))
 	(test(<= ?precio_ ?precioMax_))
-	(test (member$ ?generoApp_ $?genero_))
+	(test (member$ ?generoApp_ ?genero_))
 	(test(or	
 		(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 3000000))		
 		(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 15000000))	
@@ -260,7 +259,7 @@
 		(test (>= ?reviews_ 5000))
 		(test (>= ?valoracion_ 3.5))
 		(test (<= ?precio_ ?precioMax_))
-		(test (member$ ?generoApp_ $?genero_))
+		(test (member$ ?generoApp_ ?genero_))
 		(test (or 
 			(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 3000000))	
 			(and (eq ?espacio_ medio ) (<= ?espacioApp_ 15000000))	
@@ -284,22 +283,22 @@
 
 
 (defrule recomendarEspacio
-	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas ?aplicacionesInstaladas_))
+	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?aplicacionesInstaladas_))
 	?peticion_ <- (peticion (id ?id_) (prioridad espacio))
-	?recomendacion_ <- (recomendacion (id ?id_) (genero ?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_) (ready Si))
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_) (ready Si))
 	?appRecomendada_ <- (appRecomendada (id ?id_) (nombre ?nombre_) (posPodium ?posPodium_))
 	(test(eq ?nombre_ ""))
 	?aplicacion_ <- (aplicacion (nombre ?nombreApp_) (valoracion ?valoracion_) (reviews ?reviews_) (espacio ?espacioApp_) (descargas ?descargasApp_)
 		(precio ?precio_) (ultimaActualizacion ?ultimaActualizacion_) (androidVersion ?androidVersion_) (genero ?generoApp_) (edad ?edadApp_))
 	
-	(test (not (member$ ?nombreApp_ $?aplicacionesInstaladas_)))
+	(test (not (member$ ?nombreApp_ ?aplicacionesInstaladas_)))
 	
 	(test(>= ?edad_ (conversionEdad_Num ?edadApp_)))
 	(test(>= ?descargasApp_ 50000))
 	(test(>= ?reviews_ 5000))
 	(test(>= ?valoracion_ 3.5))
 	(test(<= ?precio_ ?precioMax_))
-	(test (member$ ?generoApp_ $?genero_))
+	(test (member$ ?generoApp_ ?genero_))
 	(test(or	
 		(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 3000000))		
 		(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 15000000))	
@@ -314,7 +313,7 @@
 		(test (>= ?reviews_ 5000))
 		(test (>= ?valoracion_ 3.5))
 		(test (<= ?precio_ ?precioMax_))
-		(test (member$ ?generoApp_ $?genero_))
+		(test (member$ ?generoApp_ ?genero_))
 		(test (or 
 			(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 3000000))	
 			(and (eq ?espacio_ medio ) (<= ?espacioApp_ 15000000))	

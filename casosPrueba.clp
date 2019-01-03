@@ -19,3 +19,30 @@
 	(aplicacion (nombre "Fantasy theme dark bw black building") (categoria ART_AND_DESIGN) (valoracion 4.8) (reviews 41) (espacio 1900000) (descargas 5000) (precio 0) (edad Everyone) (genero ArtAndDesign) (ultimaActualizacion 20/03/2018) (androidVersion "4.0") )
 	(aplicacion (nombre "FlipaClip - Cartoon animation") (categoria ART_AND_DESIGN) (valoracion 4.3) (reviews 194216) (espacio 39000000) (descargas 5000000) (precio 0) (edad Everyone) (genero ArtAndDesign) (ultimaActualizacion 3/08/2018) (androidVersion "4.0.3") )
 )
+
+(deffacts perfiles_init
+	(perfil (id "alguien") (edad 34) (sexo otro) (version "6.0") 
+	;(aplicacionesInstaladas 1 2 "350 Diy Room Decor Ideas")
+	;(genero Comics)
+	(gastoTotal 0) (gastoMaximo 0)
+	)
+	
+	(perfil (id "nadie") (edad 12) (sexo hombre) (version "3.0") 
+	;(aplicacionesInstaladas 1 2)
+	;(genero Games Education)
+	(gastoTotal 10) (gastoMaximo 10)
+	)
+)
+
+(deffacts peticion_init
+	(peticion (id "nadie")
+	;(genero Games Casual)
+	(edadDestinatario -1)
+	(prioridad descargas)
+	(espacioMax ligera)
+	(valoracionMin 3.33))
+)
+
+(deffacts recomendacion_init
+	(recomendacion (id "nadie"))
+)

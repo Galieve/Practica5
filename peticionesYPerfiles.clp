@@ -1,6 +1,3 @@
-(defmodule PETICIONESYPERFILES (import TEMPLATES ?ALL))
-
-
 (deffacts perfiles_init
 	(perfil (id "alguien") (edad 34) (sexo otro) (version "6.0") 
 	;(aplicacionesInstaladas 1 2 "350 Diy Room Decor Ideas")

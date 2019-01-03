@@ -1,5 +1,3 @@
-(defmodule TEMPLATES (export ?ALL))
-
 (defglobal ?*infinito* = 1000000000000000)
 
 (deftemplate aplicacion
@@ -28,8 +26,8 @@
 	(slot edad (type INTEGER) (range 0 ?VARIABLE) (default 0))
 	(slot sexo (type SYMBOL) (allowed-values hombre mujer otro))
 	(slot version (type STRING) )
-	(multislot aplicacionesInstaladas (default create$))
-	(multislot genero (default create$)) 
+	(multifield aplicacionesInstaladas (default create$))
+	(multifield genero (default create$)) 
 	(slot gastoTotal (type NUMBER) (range 0 ?VARIABLE) (default 0));total 
 	(slot gastoMaximo (type NUMBER) (range 0 ?VARIABLE) (default 0))
 )
@@ -37,7 +35,7 @@
 
 (deftemplate peticion
 	(slot id (type STRING))
-	(multislot generoPet (default create$))
+	(multifield genero (default create$))
 	(slot edadDestinatario (type INTEGER) (range -1 ?VARIABLE) )
 	(slot prioridad (type SYMBOL) (allowed-values espacio descargas valoracion) (default descargas))
 	(slot espacioMax (type SYMBOL) (allowed-values ligera medio pesada null) (default null))
@@ -46,7 +44,7 @@
 
 (deftemplate recomendacion
 	(slot id (type STRING) (default ""))
-	(multislot genero (default create$))
+	(multifield genero (default create$))
 	(slot edadApp (type INTEGER) (range -1 ?VARIABLE) (default -1))
 	(slot espacio (type SYMBOL) (allowed-values ligera medio pesada null) (default null))
 	(slot precioMaximo (type NUMBER) (range -1 ?VARIABLE) (default -1))
