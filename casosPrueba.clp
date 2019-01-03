@@ -39,7 +39,7 @@
 	(genero Games Casual ArtAndDesign)
 	(edadDestinatario -1)
 	(prioridad descargas)
-	(espacioMax ligera)
+	(espacioMax medio)
 	(valoracionMin 3.33))
 )
 
