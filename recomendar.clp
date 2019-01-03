@@ -204,6 +204,24 @@
 		(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 15000000))	
 		(eq ?espacio_ pesada)
 	))
+	
+	(forall (aplicacion  (nombre ?nombreApp_2&:(neq ?nombreApp_2 ?nombreApp_)) (valoracion ?valoracion_2) (espacio ?espacioApp_2) (descargas ?descargasApp_2) (genero ?generoApp_2) (edad ?edadApp_2) )
+		(test (>= ?edad_ (conversionEdad_Num ?edadApp_)))
+		(test (>= ?descargasApp_ 50000))
+		(test (>= ?reviews_ 5000))
+		(test (>= ?valoracion_ 3.5))
+		(test (<= ?precio_ ?precioMax_))
+		(test (member$ ?generoApp_ ?genero_))
+		(test (or 
+			(and (eq ?espacio_ ligera ) (<= ?espacioApp_2 3000000))	
+			(and (eq ?espacio_ medio ) (<= ?espacioApp_2 15000000))
+			(eq ?espacio_ pesada)
+		))
+		(test (printout t "descargas de mi app = "?descargasApp_ " y las de la otra: " ?descargasApp_2 crlf))
+
+		(test (not (member$ ?nombreApp_2 $?aplicacionesInstaladas_)))
+	)	
+	
 	(forall (appRecomendada (nombre ?nombre_2) (id ?id_) (posPodium ?posPodium2_&:(neq ?posPodium2_ ?posPodium_)))
 		(test (neq ?nombre_2 ?nombreApp_))
 	)
@@ -252,11 +270,10 @@
 			(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 3000000))	
 			(and (eq ?espacio_ medio ) (<= ?espacioApp_ 15000000))	
 		))
-		(test	(or	
-					(> ?valoracion_ ?valoracion_2 )	 
-					(and (eq ?valoracion_ ?valoracion_2) (>= ?descargasApp_ ?descargasApp_2 ))
-				)	
-		)
+		(test(or	
+				(> ?valoracion_ ?valoracion_2 )	 
+				(and (eq ?valoracion_ ?valoracion_2) (>= ?descargasApp_ ?descargasApp_2 ))
+		))
 		(test (not (member$ ?nombreApp_2 $?aplicacionesInstaladas_)))
 	)
 

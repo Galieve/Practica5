@@ -18,6 +18,8 @@
 	(aplicacion (nombre "Easy Realistic Drawing Tutorial") (categoria ART_AND_DESIGN) (valoracion 4.1) (reviews 223) (espacio 4200000) (descargas 100000) (precio 0) (edad Everyone) (genero ArtAndDesign) (ultimaActualizacion 22/08/2017) (androidVersion "2.3") )
 	(aplicacion (nombre "Fantasy theme dark bw black building") (categoria ART_AND_DESIGN) (valoracion 4.8) (reviews 41) (espacio 1900000) (descargas 5000) (precio 0) (edad Everyone) (genero ArtAndDesign) (ultimaActualizacion 20/03/2018) (androidVersion "4.0") )
 	(aplicacion (nombre "FlipaClip - Cartoon animation") (categoria ART_AND_DESIGN) (valoracion 4.3) (reviews 194216) (espacio 39000000) (descargas 5000000) (precio 0) (edad Everyone) (genero ArtAndDesign) (ultimaActualizacion 3/08/2018) (androidVersion "4.0.3") )
+	(aplicacion (nombre "Name Art Photo Editor - Focus n Filters") (categoria ART_AND_DESIGN) (valoracion 4.4) (reviews 8788) (espacio 12000000) (descargas 1000000) (precio 0) (edad Everyone) (genero ArtAndDesign) (ultimaActualizacion 31/07/2018) (androidVersion "4.0") )
+
 )
 
 (deffacts perfiles_init
