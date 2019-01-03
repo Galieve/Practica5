@@ -109,7 +109,7 @@
 ;--------------------------Reglas de Género---------------------------------
 
 (defrule recomendarGeneroPeticionNoNula
-	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No) )
 	?peticion_ <- (peticion (id ?id_) (genero $?genP_)) 
 	(test(neq (length$ $?genP_) 0))
 	(test(eq (length$ $?generoRec_) 0))
@@ -120,7 +120,7 @@
 
 (defrule recomendarGeneroPeticionNulaMuchasapps_
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_))
-	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No) )
 	?peticion_ <- (peticion (id ?id_) (genero $?genP_)) 
 	(test(eq  (length$ $?genP_) 0))
 	(test(>=  (length$ $?apps_) 30))
@@ -133,7 +133,7 @@
 
 (defrule recomendarGeneroPeticionNulaPocasapps_
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_))
-	?recomendacion_ <- (recomendacion (id ?id) (genero $?generoRec_) (ready No))
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
 	?peticion_ <- (peticion (id ?id_) (genero $?genP_)) 
 	(test(eq (length$ $?genP_) 0))
 	(test(<  (length$ $?apps_) 30))
@@ -201,31 +201,11 @@
 	(test(or	
 		(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 3000000))		
 		(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 15000000))	
+		(eq ?espacio_ pesada)
 	))
 	
 	
-	
-	(forall (aplicacion  (nombre ?nombreApp_2) (valoracion ?valoracion_2) (descargas ?descargasApp_2) (genero ?generoApp_2) (edad ?edadApp_2) )
-		(test (>= ?edad_ (conversionEdad_Num ?edadApp_)))
-		(test (>= ?descargasApp_ 50000))
-		(test (>= ?reviews_ 5000))
-		(test (>= ?valoracion_ 3.5))
-		(test (<= ?precio_ ?precioMax_))
-		(test (member$ ?generoApp_ ?genero_))
-		(test (or 
-			(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 3000000))	
-			(and (eq ?espacio_ medio ) (<= ?espacioApp_ 15000000))	
-		))
-		(test ( 
-			or 			
-					(> ?descargasApp_ ?descargasApp_2 )	 
-					(and (eq ?descargasApp_ ?descargasApp_2) (>= ?valoracion_ ?valoracion_2))
-				))
-		(test (not (member$ ?nombreApp_2 $?aplicacionesInstaladas_)))
-	)
-	(forall (appRecomendada (nombre ?nombre_2) (id ?id_) )
-	(test (neq ?nombre_2 ?nombre_))
-	)
+
 	
 =>
 	(printout t ?generoApp_ " y el genero recomendado es: " ?genero_ crlf)
