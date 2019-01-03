@@ -109,7 +109,7 @@
 ;--------------------------Reglas de Género---------------------------------
 
 (defrule recomendarGeneroPeticionNoNula
-	?recomendacion_ <- (recomendacion (id ?id) (ready No) )
+	?recomendacion_ <- (recomendacion (id ?id_) (ready No) (genero ?generoRec_))
 	?peticion_ <- (peticion (id ?id_) (genero $?genP_)) 
 	(test(neq (length$ $?genP_) 0))
 	(test(eq (length$ $?generoRec_) 0))
@@ -161,7 +161,7 @@
 	(test(neq ?precioMax_ -1))
 =>
 	(modify ?recomendacion_ (ready Si))
-	(assert (appRecomendada (id ?id_) (posPodium 1)))
+	(assert (appRecomendada (id ?id_) (posPodium 1) (nombre "LucianOP")))
 )
 ;Pedir pospodium < 3
 ;-------------------------------------------------------------------------

@@ -36,7 +36,7 @@
 
 (deffacts peticion_init
 	(peticion (id "nadie")
-	;(genero Games Casual)
+	(genero Games Casual ArtAndDesign)
 	(edadDestinatario -1)
 	(prioridad descargas)
 	(espacioMax ligera)
