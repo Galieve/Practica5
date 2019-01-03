@@ -109,7 +109,7 @@
 ;--------------------------Reglas de Género---------------------------------
 
 (defrule recomendarGeneroPeticionNoNula
-	?recomendacion_ <- (recomendacion (id ?id_) (ready No) (genero ?generoRec_))
+	?recomendacion_ <- (recomendacion (id ?id_) (ready No) (genero $?generoRec_))
 	?peticion_ <- (peticion (id ?id_) (genero $?genP_)) 
 	(test(neq (length$ $?genP_) 0))
 	(test(eq (length$ $?generoRec_) 0))
@@ -161,7 +161,7 @@
 	(test(neq ?precioMax_ -1))
 =>
 	(modify ?recomendacion_ (ready Si))
-	(assert (appRecomendada (id ?id_) (posPodium 1) (nombre "LucianOP")))
+	(assert (appRecomendada (id ?id_) (posPodium 1)))
 )
 ;Pedir pospodium < 3
 ;-------------------------------------------------------------------------
@@ -198,13 +198,15 @@
 	(test(>= ?valoracion_ 3.5))
 	(test(<= ?precio_ ?precioMax_))
 	(test (neq (member$ ?generoApp_ ?genero_) FALSE))
+
 	(test(or	
 		(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 3000000))		
 		(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 15000000))	
 		(eq ?espacio_ pesada)
 	))
-	
-	
+	(forall (appRecomendada (nombre ?nombre_2) (id ?id_) (posPodium ?posPodium2_&:(neq ?posPodium2_ ?posPodium_)))
+		(test (neq ?nombre_2 ?nombreApp_))
+	)
 
 	
 =>
@@ -213,6 +215,7 @@
 	
 )
 
+;-------------------------
 
 
 (defrule recomendarValoracion
@@ -256,8 +259,9 @@
 		)
 		(test (not (member$ ?nombreApp_2 $?aplicacionesInstaladas_)))
 	)
-	(forall (appRecomendada (nombre ?nombre_2) (id ?id_) )
-	(test (neq ?nombre_2 ?nombre_))
+
+	(forall (appRecomendada (nombre ?nombre_2) (id ?id_) (posPodium ?posPodium2_&:(neq ?posPodium2_ ?posPodium_)))
+		(test (neq ?nombre_2 ?nombreApp_))
 	)
 
 =>
@@ -310,8 +314,8 @@
 		)
 		(test (not (member$ ?nombreApp_2 $?aplicacionesInstaladas_)))
 	)
-	(forall (appRecomendada (nombre ?nombre_2) (id ?id_) )
-		(test (neq ?nombre_2 ?nombre_))
+	(forall (appRecomendada (nombre ?nombre_2) (id ?id_) (posPodium ?posPodium2_&:(neq ?posPodium2_ ?posPodium_)))
+		(test (neq ?nombre_2 ?nombreApp_))
 	)
 
 =>
