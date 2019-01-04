@@ -10272,28 +10272,27 @@
 
 (deffacts perfiles_init
 	(perfil (id "alguien") (edad 34) (sexo otro) (version "6.0") 
-	(aplicacionesInstaladas "Name Art Photo Editor - Focus n Filters" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" 
-		"k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" 
-		"k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" "k" "kk" 
+	(aplicacionesInstaladas "Yandex.Weather"  "Yahoo! Weather for SH Forecast for understanding the approach of rain clouds Free" "Yahoo Weather" "Windguru Lite"
+		
 	)
-	(genero Comics)
+	(genero Weather)
 	(gastoTotal 0) (gastoMaximo 0)
 	)
 	
 	(perfil (id "nadie") (edad 12) (sexo hombre) (version "3.0") 
 	(aplicacionesInstaladas )
-	(genero Games Education ArtAndDesign)
+	(genero)
 	(gastoTotal 10) (gastoMaximo 10)
 	)
 )
 
 (deffacts peticion_init
-	(peticion (id "nadie") (genero Games Casual ArtAndDesign) (edadDestinatario -1) (prioridad descargas) (espacioMax medio) (valoracionMin 3))
-	(peticion (id "alguien") (genero ) (espacioMax medio) (valoracionMin 4))
+	(peticion (id "nadie") (genero) (edadDestinatario -1) (prioridad descargas) (espacioMax medio) (valoracionMin 3))
+	(peticion (id "alguien") (genero) (espacioMax medio) (valoracionMin 4))
 
 )
 
 (deffacts recomendacion_init
-	;(recomendacion (id "nadie"))
+	(recomendacion (id "nadie"))
 	(recomendacion (id "alguien"))
 )

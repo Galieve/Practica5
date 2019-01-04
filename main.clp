@@ -8,6 +8,7 @@
 =>
 	(load "templates.clp")
 	(load "recomendar.clp")
+	(load "recomendar_2.clp")
 	(load "casosPrueba.clp")
 	(reset)
 	(assert (inicial))
