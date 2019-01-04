@@ -39,7 +39,8 @@
 	(slot edadDestinatario (type INTEGER) (range -1 ?VARIABLE) (default -1))
 	(slot prioridad (type SYMBOL) (allowed-values espacio descargas valoracion) (default descargas))
 	(slot espacioMax (type SYMBOL) (allowed-values ligera medio pesada null) (default null))
-	(slot valoracionMin (type NUMBER) (range 0 5) (default 0))
+	(slot valoracionMin (type INTEGER) (range -1 5) (default -1))
+	(multislot listaApps)
 )
 
 (deftemplate recomendacion
@@ -48,6 +49,7 @@
 	(slot edadApp (type INTEGER) (range -1 ?VARIABLE) (default -1))
 	(slot espacio (type SYMBOL) (allowed-values ligera medio pesada null) (default null))
 	(slot precioMaximo (type NUMBER) (range -1 ?VARIABLE) (default -1))
+	(slot valoracionMin (type NUMBER) (range -1 5) (default -1))
 	(slot ready (allowed-values Si No) (default No))
 )
 

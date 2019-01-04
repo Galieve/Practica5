@@ -60,6 +60,27 @@
 	(modify ?recomendacion_ (edadApp ?edPet_))
 )
 
+;---------------------------Reglas de Valoracion ----------------------------
+
+
+(defrule recomendarValoracionNula
+	?recomendacion_ <- (recomendacion (id ?id_) (ready No) (valoracionMin -1) )
+	?peticion_ <- (peticion (id ?id_) (valoracionMin ?valMin_)) 
+	(test(eq ?valMin_ -1))
+
+=>
+	(modify ?recomendacion_ (valoracionMin 3.5))
+)
+
+(defrule recomendarValoracionNoNula
+	?recomendacion_ <- (recomendacion (id ?id_) (ready No) (valoracionMin -1) )
+	?peticion_ <- (peticion (id ?id_) (valoracionMin ?valMin_)) 
+	(test(neq ?valMin_ -1))
+
+=>
+	(modify ?recomendacion_ (valoracionMin ?valMin_))
+)
+
 ;---------------------------Reglas de Espacio--------------------------------
 
 (defrule recomendarEspacioPedido
@@ -182,8 +203,9 @@
 
 (defrule recomendarDescargas
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?aplicacionesInstaladas_))
-	?peticion_ <- (peticion (id ?id_) (prioridad descargas))
-	?recomendacion_ <- (recomendacion (id ?id_) (genero $?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_) (ready Si))
+	?peticion_ <- (peticion (id ?id_) (prioridad descargas) (listaApps $?listaApps_))
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_)
+		(ready Si)(valoracionMin ?valoracionMin_))
 	?appRecomendada_ <- (appRecomendada (id ?id_) (nombre ?nombre_) (posPodium ?posPodium_))
 	(test(eq ?nombre_ ""))
 	?aplicacion_ <- (aplicacion (nombre ?nombreApp_) (valoracion ?valoracion_) (reviews ?reviews_) (espacio ?espacioApp_) (descargas ?descargasApp_)
@@ -194,7 +216,7 @@
 	(test(>= ?edad_ (conversionEdad_Num ?edadApp_)))
 	(test(>= ?descargasApp_ 50000))
 	(test(>= ?reviews_ 5000))
-	(test(>= ?valoracion_ 3.5))
+	(test(>= ?valoracion_ ?valoracionMin_))
 	(test(<= ?precio_ ?precioMax_))
 	(test (neq (member$ ?generoApp_ ?genero_) FALSE))
 
@@ -207,9 +229,9 @@
 	(forall
 		(aplicacion 
 			(nombre ?nombreApp_2&:
-				(and(not (member$ ?nombreApp_2 $?aplicacionesInstaladas_))(neq ?nombreApp_2 ?nombreApp_))) 
+				(and(not (member$ ?nombreApp_2 $?aplicacionesInstaladas_))(neq ?nombreApp_2 ?nombreApp_) (not (member$ ?nombreApp_2 $?listaApps_)) )) 
 			(reviews ?reviews_2&:(>= ?reviews_2 5000)) 
-			(valoracion ?valoracion_2&:(>= ?valoracion_2 3.5)) 
+			(valoracion ?valoracion_2&:(>= ?valoracion_2 ?valoracionMin_)) 
 			(espacio ?espacioApp_2&:(or 
 				(and (eq ?espacio_ ligera ) (<= ?espacioApp_2 3000000))	
 				(and (eq ?espacio_ medio ) (<= ?espacioApp_2 15000000))
@@ -233,7 +255,8 @@
 	
 =>
 	(printout t "Se ha recomendado la app: "?nombreApp_ crlf)
-	(modify ?appRecomendada_ (nombre ?nombreApp_))
+	(modify ?peticion_ (listaApps (insert$ $?listaApps_ 1 ?nombreApp_)))
+	(modify ?appRecomendada_ (nombre ?nombreApp_)) 
 	
 )
 
@@ -250,10 +273,11 @@
 ;-------------------------
 
 
-(defrule recomendarValoracion
+(defrule recomendarValoraciones
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?aplicacionesInstaladas_))
-	?peticion_ <- (peticion (id ?id_) (prioridad valoracion))
-	?recomendacion_ <- (recomendacion (id ?id_) (genero $?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_) (ready Si))
+	?peticion_ <- (peticion (id ?id_) (prioridad valoracion) (listaApps $?listaApps_))
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_) 
+		(ready Si) (valoracionMin ?valoracionMin_))
 	?appRecomendada_ <- (appRecomendada (id ?id_) (nombre ?nombre_) (posPodium ?posPodium_))
 	(test(eq ?nombre_ ""))
 	?aplicacion_ <- (aplicacion (nombre ?nombreApp_) (valoracion ?valoracion_) (reviews ?reviews_) (espacio ?espacioApp_) (descargas ?descargasApp_)
@@ -264,48 +288,59 @@
 	(test(>= ?edad_ (conversionEdad_Num ?edadApp_)))
 	(test(>= ?descargasApp_ 50000))
 	(test(>= ?reviews_ 5000))
-	(test(>= ?valoracion_ 3.5))
+	(test(>= ?valoracion_ ?valoracionMin_))
 	(test(<= ?precio_ ?precioMax_))
-	(test (member$ ?generoApp_ ?genero_))
+	(test (neq (member$ ?generoApp_ ?genero_) FALSE))
+
 	(test(or	
 		(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 3000000))		
 		(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 15000000))	
+		(eq ?espacio_ pesada)
 	))
 	
-	
-	(forall (aplicacion  (nombre ?nombreApp_2) (valoracion ?valoracion_2) (descargas ?descargasApp_2) (genero ?generoApp_2) (edad ?edadApp_2) )
-		(test (>= ?edad_ (conversionEdad_Num ?edadApp_)))
-		(test (>= ?descargasApp_ 50000))
-		(test (>= ?reviews_ 5000))
-		(test (>= ?valoracion_ 3.5))
-		(test (<= ?precio_ ?precioMax_))
-		(test (member$ ?generoApp_ ?genero_))
-		(test (or 
-			(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 3000000))	
-			(and (eq ?espacio_ medio ) (<= ?espacioApp_ 15000000))	
-		))
-		(test(or	
-				(> ?valoracion_ ?valoracion_2 )	 
-				(and (eq ?valoracion_ ?valoracion_2) (>= ?descargasApp_ ?descargasApp_2 ))
-		))
-		(test (not (member$ ?nombreApp_2 $?aplicacionesInstaladas_)))
-	)
-
+	(forall
+		(aplicacion 
+			(nombre ?nombreApp_2&:
+				(and(not (member$ ?nombreApp_2 $?aplicacionesInstaladas_))(neq ?nombreApp_2 ?nombreApp_) (not (member$ ?nombreApp_2 $?listaApps_)) )) 
+			(reviews ?reviews_2&:(>= ?reviews_2 5000)) 
+			(valoracion ?valoracion_2&:(>= ?valoracion_2 ?valoracionMin_)) 
+			(espacio ?espacioApp_2&:(or 
+				(and (eq ?espacio_ ligera ) (<= ?espacioApp_2 3000000))	
+				(and (eq ?espacio_ medio ) (<= ?espacioApp_2 15000000))
+				(eq ?espacio_ pesada))) 
+			(descargas ?descargasApp_2&:(>= ?descargasApp_2 50000))
+			(precio ?precio_2&:(<= ?precio_2 ?precioMax_)) 
+			(genero ?generoApp_2&:(member$ ?generoApp_2 ?genero_))
+			(edad ?edadApp_2&:(>= ?edad_ (conversionEdad_Num ?edadApp_2)))
+		)
+			
+		(test(or		
+				(> ?valoracion_ ?valoracion_2)	 
+				(and (eq ?valoracion_ ?valoracion_2) (>= ?descargasApp_ ?descargasApp_2))
+			)
+		)
+	)	
 	(forall (appRecomendada (nombre ?nombre_2) (id ?id_) (posPodium ?posPodium2_&:(neq ?posPodium2_ ?posPodium_)))
-		(test (neq ?nombre_2 ?nombreApp_))
-	)
-
-=>
-	(modify ?appRecomendada_ (nombre ?nombre_))
+						(test (neq ?nombre_2 ?nombreApp_)))
 	
+
+	
+=>
+	(printout t "Se ha recomendado la app: "?nombreApp_ crlf)
+	(modify ?peticion_ (listaApps (insert$ $?listaApps_ 1 ?nombreApp_)))
+	(modify ?appRecomendada_ (nombre ?nombreApp_)) 
 )
+
+
+
 
 
 
 (defrule recomendarEspacio
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?aplicacionesInstaladas_))
-	?peticion_ <- (peticion (id ?id_) (prioridad espacio))
-	?recomendacion_ <- (recomendacion (id ?id_) (genero $?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_) (ready Si))
+	?peticion_ <- (peticion (id ?id_) (prioridad espacio) (listaApps $?listaApps_))
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_)
+		(ready Si) (valoracionMin ?valoracionMin_))
 	?appRecomendada_ <- (appRecomendada (id ?id_) (nombre ?nombre_) (posPodium ?posPodium_))
 	(test(eq ?nombre_ ""))
 	?aplicacion_ <- (aplicacion (nombre ?nombreApp_) (valoracion ?valoracion_) (reviews ?reviews_) (espacio ?espacioApp_) (descargas ?descargasApp_)
@@ -316,47 +351,49 @@
 	(test(>= ?edad_ (conversionEdad_Num ?edadApp_)))
 	(test(>= ?descargasApp_ 50000))
 	(test(>= ?reviews_ 5000))
-	(test(>= ?valoracion_ 3.5))
+	(test(>= ?valoracion_ ?valoracionMin_))
 	(test(<= ?precio_ ?precioMax_))
-	(test (member$ ?generoApp_ ?genero_))
+	(test (neq (member$ ?generoApp_ ?genero_) FALSE))
+
 	(test(or	
 		(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 3000000))		
 		(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 15000000))	
+		(eq ?espacio_ pesada)
 	))
 	
-	
-	
-	(forall (aplicacion  (nombre ?nombreApp_2) (valoracion ?valoracion_2) (espacio ?espacioApp_2) 
-		(genero ?generoApp_2) (edad ?edadApp_2) )
-		(test (>= ?edad_ (conversionEdad_Num ?edadApp_)))
-		(test (>= ?descargasApp_ 50000))
-		(test (>= ?reviews_ 5000))
-		(test (>= ?valoracion_ 3.5))
-		(test (<= ?precio_ ?precioMax_))
-		(test (member$ ?generoApp_ ?genero_))
-		(test (or 
-			(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 3000000))	
-			(and (eq ?espacio_ medio ) (<= ?espacioApp_ 15000000))	
-		))
-		(test (or
-			(and(or		
-					(> ?espacioApp_ ?espacioApp_2)	 
-					(and (eq ?espacioApp_ ?espacioApp_2) (>= ?valoracion_ ?valoracion_2)))
-				(not (member$ ?nombreApp_2 $?aplicacionesInstaladas_))
-			)
-			FALSE
-			;(exists (appRecomendada (nombre ?nombreApp_2) (id ?id_)))
+	(forall
+		(aplicacion 
+			(nombre ?nombreApp_2&:
+				(and(not (member$ ?nombreApp_2 $?aplicacionesInstaladas_))(neq ?nombreApp_2 ?nombreApp_) (not (member$ ?nombreApp_2 $?listaApps_)) )) 
+			(reviews ?reviews_2&:(>= ?reviews_2 5000)) 
+			(valoracion ?valoracion_2&:(>= ?valoracion_2 ?valoracionMin_)) 
+			(espacio ?espacioApp_2&:(or 
+				(and (eq ?espacio_ ligera ) (<= ?espacioApp_2 3000000))	
+				(and (eq ?espacio_ medio ) (<= ?espacioApp_2 15000000))
+				(eq ?espacio_ pesada))) 
+			(descargas ?descargasApp_2&:(>= ?descargasApp_2 50000))
+			(precio ?precio_2&:(<= ?precio_2 ?precioMax_)) 
+			(genero ?generoApp_2&:(member$ ?generoApp_2 ?genero_))
+			(edad ?edadApp_2&:(>= ?edad_ (conversionEdad_Num ?edadApp_2)))
+		)
+			
+		(test(or		
+				(> ?espacioApp_ ?espacioApp_2)	 
+				(and (eq ?espacioApp_ ?espacioApp_2) (>= ?valoracion_ ?valoracion_2))
 			)
 		)
-	)
+	)	
 	(forall (appRecomendada (nombre ?nombre_2) (id ?id_) (posPodium ?posPodium2_&:(neq ?posPodium2_ ?posPodium_)))
-		(test (neq ?nombre_2 ?nombreApp_))
-	)
-
-=>
-	(modify ?appRecomendada_ (nombre ?nombre_))
+						(test (neq ?nombre_2 ?nombreApp_)))
 	
+
+	
+=>
+	(printout t "Se ha recomendado la app: "?nombreApp_ crlf)
+	(modify ?peticion_ (listaApps (insert$ $?listaApps_ 1 ?nombreApp_)))
+	(modify ?appRecomendada_ (nombre ?nombreApp_)) 
 )
+
 
 
 
