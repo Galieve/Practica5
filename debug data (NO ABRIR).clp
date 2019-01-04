@@ -34,8 +34,6 @@
 ;
 
 
-
-
 	(forall (aplicacion  (nombre ?nombreApp_2) (valoracion ?valoracion_2) (descargas ?descargasApp_2) (genero ?generoApp_2) (edad ?edadApp_2) )
 		(test (>= ?edad_ (conversionEdad_Num ?edadApp_)))
 		(test (>= ?descargasApp_ 50000))
@@ -47,14 +45,35 @@
 			(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 3000000))	
 			(and (eq ?espacio_ medio ) (<= ?espacioApp_ 15000000))	
 		))
-		(test	(or	
-					(> ?valoracion_ ?valoracion_2 )	 
-					(and (eq ?valoracion_ ?valoracion_2) (>= ?descargasApp_ ?descargasApp_2 ))
-				)	
-		)
+		
 		(test (not (member$ ?nombreApp_2 $?aplicacionesInstaladas_)))
-	)
+	)	
 	
-		(forall (appRecomendada (nombre ?nombre_2) (id ?id_) )
-	(test (neq ?nombre_2 ?nombre_))
-	)
+
+
+
+(defrule recomendarGeneroPeticionNulaPocasapps_
+	(declare (salience -1))
+	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_))
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
+	?peticion_ <- (peticion (id ?id_) (genero $?genP_)) 
+	(test(eq (length$ $?genP_) 0))
+	(test(<  (length$ $?apps_) 30))
+	(test(eq (length$ $?generoRec_) 0))
+=>
+	(modify ?recomendacion_ (genero Action Adventure Arcade ArtAndDesign AutoAndVehicles Beauty Board BooksAndReference
+		Business Card Casino Casual Comics Communication Dating Education Educational Entertainment Events Finance FoodAndDrink 
+		HealthAndFitness HouseAndHome LibrariesAndDemo Lifestyle MapsAndNavigation Medical Music MusicAndAudio NewsAndMagazines 
+		Parenting Personalization Photography Productivity Puzzle Racing RolePlaying Shopping Simulation Social Sports Strategy 
+		Tools TravelAndLocal Trivia VideoPlayersAndEditors Weather Word))
+)
+
+
+(defrule x
+		?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready Si))
+=>
+	(printout t ?generoRec_ crlf)
+)
+
+
+
