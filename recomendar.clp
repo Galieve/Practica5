@@ -151,23 +151,7 @@
 	(modify ?recomendacion_ (genero ?genPerf_))
 )
 
-(defrule recomendarGeneroPeticionNulaPocasapps_
-	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_))
-	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
-	?peticion_ <- (peticion (id ?id_) (genero $?genP_)) 
-	(test(eq (length$ $?genP_) 0))
-	(test(<  (length$ $?apps_) 30))
-	(test(eq (length$ $?generoRec_) 0))
-=>
-	(modify ?recomendacion_ (genero Action Adventure Arcade ArtAndDesign AutoAndVehicles Beauty Board BooksAndReference
-		Business Card Casino Casual Comics Communication Dating Education Educational Entertainment Events Finance FoodAndDrink 
-		HealthAndFitness HouseAndHome LibrariesAndDemo Lifestyle MapsAndNavigation Medical Music MusicAndAudio NewsAndMagazines 
-		Parenting Personalization Photography Productivity Puzzle Racing RolePlaying Shopping Simulation Social Sports Strategy 
-		Tools TravelAndLocal Trivia VideoPlayersAndEditors Weather Word))
-)
-
-
-	
+;--El resto de reglas de este apartado están en otro fichero	
 	
 	
 ;-------------------------------------------------------------------------
