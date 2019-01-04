@@ -36,7 +36,7 @@
 (deftemplate peticion
 	(slot id (type STRING))
 	(multislot genero)
-	(slot edadDestinatario (type INTEGER) (range -1 ?VARIABLE) )
+	(slot edadDestinatario (type INTEGER) (range -1 ?VARIABLE) (default -1))
 	(slot prioridad (type SYMBOL) (allowed-values espacio descargas valoracion) (default descargas))
 	(slot espacioMax (type SYMBOL) (allowed-values ligera medio pesada null) (default null))
 	(slot valoracionMin (type NUMBER) (range 0 5) (default 0))
