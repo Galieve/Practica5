@@ -4,22 +4,20 @@
 (deftemplate inicial)
 
 (defrule main
-	(declare (salience -126))
+	(declare (salience -127))
 =>
 	(load "templates.clp")
+	(load "funciones.clp")
 	(load "recomendar.clp")
 	(load "recomendar_2.clp")
-	(load "entrada_salida.clp")
+	;(load "entrada_salida.clp")
 	(load "casosPrueba.clp")
-	
 	(reset)
-	(assert (inicial))
-	
-	
+	(assert (inicial))	
 )
 
 (defrule onlyOneMain
-	(declare(salience 126))
+	(declare(salience 127))
 	?in <- (inicial)
 =>
 	(undefrule main)

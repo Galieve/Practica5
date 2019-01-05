@@ -60,3 +60,4 @@
 	(slot posPodium (type INTEGER) (range 1 3))
 	;(slot satisfecha (default No))
 )
+

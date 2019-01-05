@@ -10294,6 +10294,6 @@
 )
 
 (deffacts recomendacion_init
-	(recomendacion (id "nadie"))
+	;(recomendacion (id "nadie"))
 	(recomendacion (id "alguien"))
 )

@@ -1,13 +1,3 @@
-(deffunction contieneJuegos (?array)
-	(if (or
-			(member$ Games $?array)
-			(subsetp (create$ Action Adventure Arcade Board Card Casino Casual Entertainment
-				Music Puzzle Racing RolePlaying Simulation Strategy Trivia Word) ?array)
-		)
-		then TRUE else FALSE
-	)
-)
-
 (defrule recomendarGenero_PetNula_Joven
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_) (edad ?edad_&:(and(>= ?edad_ 18) (< ?edad_ 30))))
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
@@ -27,7 +17,10 @@
 
 	))
 =>
-	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Social Dating Shopping Comics Personalization Photography Music MusicAndAudio Communication)))
+	(bind $?generoRec_ (insertListElementoUnico
+		(create$ Social Dating Shopping Comics Personalization Photography Music MusicAndAudio Communication)
+		?generoRec_))
+	(modify ?recomendacion_ (genero $?generoRec_))
 )
 
 (defrule recomendarGenero_PetNula_Adulto
@@ -45,7 +38,8 @@
 		(not (member$ Communication $?generoRec_))
 	))
 =>
-	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Business Lifestyle HealthAndFitness NewsAndMagazines Finance Communication)))
+	(bind $?generoRec_ (insertListElementoUnico(create$ Business Lifestyle HealthAndFitness NewsAndMagazines Finance Communication) ?generoRec_))
+	(modify ?recomendacion_ (genero $?generoRec_))
 
 )
 
@@ -64,7 +58,8 @@
 		(not (member$ TravelAndLocal $?generoRec_))
 	))
 =>
-	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Weather HouseAndHome Medical NewsAndMagazines BooksAndReference TravelAndLocal)))
+	(bind $?generoRec_ (insertListElementoUnico(create$ Weather HouseAndHome Medical NewsAndMagazines BooksAndReference TravelAndLocal) ?generoRec_))
+	(modify ?recomendacion_ (genero $?generoRec_))
 )
 
 (defrule recomendarGenero_PetNula_Menor
@@ -79,7 +74,8 @@
 		(not (member$ Entertainment $?generoRec_))
 	))
 =>
-	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Education Educational Entertainment)))
+	(bind $?generoRec_ (insertListElementoUnico(create$ Education Educational Entertainment) ?generoRec_))
+	(modify ?recomendacion_ (genero $?generoRec_))
 
 )
 
@@ -96,7 +92,8 @@
 	(aplicacion (nombre ?n4&:(and (member$ ?n4 ?apps_)(neq ?n1 ?n4) (neq ?n2 ?n4) (neq ?n3 ?n4))) (genero ?gen))
 		
 =>
-	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 ?gen)))
+	(bind $?generoRec_(insertElementoUnico ?gen ?generoRec_))
+	(modify ?recomendacion_ (genero $?generoRec_))
 )
 
 
@@ -112,9 +109,9 @@
 		(not (member$ ArtAndDesign $?generoRec_))
 		(not (member$ Photography $?generoRec_))
 	))
-=>
-	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Beauty ArtAndDesign Photography)))
-
+=>	
+	(bind $?generoRec_ (insertListElementoUnico(create$ Beauty ArtAndDesign Photography) ?generoRec_))
+	(modify ?recomendacion_ (genero $?generoRec_))
 )
 
 (defrule recomendarGenero_PetNula_MujerAdulta
@@ -130,8 +127,8 @@
 	))	
 	
 =>
-	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Parenting HouseAndHome Medical)))
-
+	(bind $?generoRec_ (insertListElementoUnico(create$ Parenting HouseAndHome Medical) ?generoRec_))
+	(modify ?recomendacion_ (genero $?generoRec_))
 )
 
 (defrule recomendarGenero_PetNula_HombreJoven
@@ -150,7 +147,8 @@
 	))	
 	
 =>
-	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Games LibrariesAndDemo VideoPlayersAndEditors FoodAndDrink Comics)))
+	(bind $?generoRec_ (insertListElementoUnico(create$ Games LibrariesAndDemo VideoPlayersAndEditors FoodAndDrink Comics) ?generoRec_))
+	(modify ?recomendacion_ (genero $?generoRec_))
 
 )
 
@@ -168,8 +166,8 @@
 		(not (member$ AutoAndVehicles $?generoRec_))
 	))	
 =>
-	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Events Productivity MapsAndNavigation AutoAndVehicles)))
-
+	(bind $?generoRec_ (insertListElementoUnico(create$ Events Productivity MapsAndNavigation AutoAndVehicles) ?generoRec_))
+	(modify ?recomendacion_ (genero $?generoRec_))
 )
 
 ;---- Games es un género privado que usamos para englobar todos los juegos. Aquí se traducen.
@@ -178,20 +176,33 @@
 	(test (member$ Games $?generoRec_))
 =>
 	(bind $?generoRec_ (delete$ $?generoRec_ (member$ Games $?generoRec_) (member$ Games $?generoRec_)))
-	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 
-		Action Adventure Arcade Board Card Casino Casual Entertainment Music Puzzle Racing RolePlaying Simulation Strategy Trivia Word)))	
+	(bind $?generoRec_ (insertListElementoUnico 
+		(create$ Action Adventure Arcade Board Card Casino Casual Entertainment Music Puzzle Racing RolePlaying Simulation Strategy Trivia Word)
+		?generoRec_))
+	(modify ?recomendacion_ (genero $?generoRec_))
 )
 
 
 
-(defrule recomendarUltimosGenerosInstalados
+(defrule recomendarGeneroUltimasAppsInstaladas
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_)  )
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
 	?peticion_ <- (peticion (id ?id_) (genero $?genPet_))
 	(test (eq (length$ $?genPet_) 0))
-	(test (not(subsetp (subseq$ ?genPerf_ 1 2) ?generoRec_)))
+	;(bind $?lastAppInstaladas (subseq$ $?apps_ 1 2))
+	;?n1 <- (nth$ 1 $?lastAppInstaladas)
+	;?n2 <- (nth$ 2 $?lastAppInstaladas)
+	(aplicacion (nombre ?n1&:(eq ?n1 (nth$ 1 (subseq$ $?apps_ 1 2)))) (genero ?g1))
+	(aplicacion (nombre ?n2&:(eq ?n1 (nth$ 2 (subseq$ $?apps_ 1 2)))) (genero ?g2))
+	(test (or
+		(not (member$ ?g1 ?generoRec_))
+		(not (member$ ?g2 ?generoRec_))
+	))
 =>
-	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 (subseq$ ?genPerf_ 1 2))))
+	(insertElementoUnico ?g1 ?generoRec_)
+	(insertElementoUnico ?g2 ?generoRec_)
+	(modify ?recomendacion_ (genero $?generoRec_ ))
+	
 )
 
 ;-----En otro clp, es para Chema #TODO
