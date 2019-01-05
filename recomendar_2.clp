@@ -1,4 +1,12 @@
-
+(deffunction contieneJuegos (?array)
+	(if (or
+			(member$ Games $?array)
+			(subsetp (create$ Action Adventure Arcade Board Card Casino Casual Entertainment
+				Music Puzzle Racing RolePlaying Simulation Strategy Trivia Word) ?array)
+		)
+		then TRUE else FALSE
+	)
+)
 
 (defrule recomendarGenero_PetNula_Joven
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_) (edad ?edad_&:(and(>= ?edad_ 18) (< ?edad_ 30))))
@@ -13,9 +21,13 @@
 		(not (member$ Comics $?generoRec_))
 		(not (member$ Personalization $?generoRec_))
 		(not (member$ Photography $?generoRec_))
+		(not (member$ Music $?generoRec_))
+		(not (member$ MusicAndAudio $?generoRec_))
+		(not (member$ Communication $?generoRec_))
+
 	))
 =>
-	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Social Dating Shopping Comics Personalization Photography)))
+	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Social Dating Shopping Comics Personalization Photography Music MusicAndAudio Communication)))
 )
 
 (defrule recomendarGenero_PetNula_Adulto
@@ -28,13 +40,12 @@
 		(not (member$ Business $?generoRec_))
 		(not (member$ Lifestyle $?generoRec_))
 		(not (member$ HealthAndFitness $?generoRec_))
-		(not (member$ Productivity $?generoRec_))
 		(not (member$ NewsAndMagazines $?generoRec_))
 		(not (member$ Finance $?generoRec_))
-
+		(not (member$ Communication $?generoRec_))
 	))
 =>
-	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Business Lifestyle HealthAndFitness Productivity NewsAndMagazines Finance)))
+	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Business Lifestyle HealthAndFitness NewsAndMagazines Finance Communication)))
 
 )
 
@@ -98,19 +109,16 @@
 	(test(<  (length$ $?apps_) 30))
 	(test (or
 		(not (member$ Beauty $?generoRec_))
-		(not (member$ Shopping $?generoRec_))
-		(not (member$ ArtAndDesign $?generoRec_
+		(not (member$ ArtAndDesign $?generoRec_))
 		(not (member$ Photography $?generoRec_))
-
-	))	
-	
+	))
 =>
-	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Beauty Shopping ArtAndDesign Photography)))
+	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Beauty ArtAndDesign Photography)))
 
 )
 
 (defrule recomendarGenero_PetNula_MujerAdulta
-	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_) (sexo mujer) (edad ?ed&:(< ?ed 30)) )
+	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_) (sexo mujer) (edad ?ed&:(>= ?ed 30)) )
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
 	?peticion_ <- (peticion (id ?id_) (genero $?genPet_)) 
 	(test(eq (length$ $?genPet_) 0))
@@ -126,28 +134,92 @@
 
 )
 
-
-Action Adventure Arcade ArtAndDesign AutoAndVehicles Beauty Board BooksAndReference
-		Business Card Casino Casual Comics Communication Dating Education Educational Entertainment Events Finance FoodAndDrink 
-		HealthAndFitness HouseAndHome LibrariesAndDemo Lifestyle MapsAndNavigation Medical Music MusicAndAudio NewsAndMagazines 
-		Parenting Personalization  Productivity Puzzle Racing RolePlaying Shopping Simulation Social Sports Strategy 
-		Tools TravelAndLocal Trivia VideoPlayersAndEditors Weather Word
-
-(defrule recomendarGenero_PetNula_Hombre
+(defrule recomendarGenero_PetNula_HombreJoven
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_) (sexo hombre) (edad ?ed&:(< ?ed 30)) )
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
 	?peticion_ <- (peticion (id ?id_) (genero $?genPet_)) 
 	(test(eq (length$ $?genPet_) 0))
 	(test(<  (length$ $?apps_) 30))
 	(test (or
-		(not (member$ Beauty $?generoRec_))
-		(not (member$ Shopping $?generoRec_))
-		(not (member$ ArtAndDesign $?generoRec_))
+		(not(contieneJuegos ?generoRec_))
+		(not (member$ LibrariesAndDemo $?generoRec_))
+		(not (member$ VideoPlayersAndEditors $?generoRec_))
+		(not (member$ FoodAndDrink $?generoRec_))
+		(not (member$ Comics $?generoRec_))
+
 	))	
 	
 =>
-	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Beauty Shopping ArtAndDesign)))
+	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Games LibrariesAndDemo VideoPlayersAndEditors FoodAndDrink Comics)))
 
+)
+
+
+(defrule recomendarGenero_PetNula_HombreAdulto
+	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_) (sexo hombre) (edad ?ed&:(>= ?ed 30)) )
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
+	?peticion_ <- (peticion (id ?id_) (genero $?genPet_)) 
+	(test (eq (length$ $?genPet_) 0))
+	(test (<  (length$ $?apps_) 30))
+	(test (or
+		(not (member$ Events $?generoRec_))
+		(not (member$ Productivity $?generoRec_))
+		(not (member$ MapsAndNavigation $?generoRec_))
+		(not (member$ AutoAndVehicles $?generoRec_))
+	))	
+=>
+	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Events Productivity MapsAndNavigation AutoAndVehicles)))
+
+)
+
+;---- Games es un género privado que usamos para englobar todos los juegos. Aquí se traducen.
+(defrule recomendarJuegos
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
+	(test (member$ Games $?generoRec_))
+=>
+	(bind $?generoRec_ (delete$ $?generoRec_ (member$ Games $?generoRec_) (member$ Games $?generoRec_)))
+	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 
+		Action Adventure Arcade Board Card Casino Casual Entertainment Music Puzzle Racing RolePlaying Simulation Strategy Trivia Word)))	
+)
+
+
+
+(defrule recomendarUltimosGenerosInstalados
+	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_)  )
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
+	?peticion_ <- (peticion (id ?id_) (genero $?genPet_))
+	(test (eq (length$ $?genPet_) 0))
+	(test (not(subsetp (subseq$ ?genPerf_ 1 2) ?generoRec_)))
+=>
+	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 (subseq$ ?genPerf_ 1 2))))
+)
+
+;-----En otro clp, es para Chema #TODO
+(defrule updatePerfilJuegos
+	?perfil_ <- (perfil (id ?id_) (genero $?genPerf_) )
+	(test (and
+		(not (member$ Games $?genPerf_))
+		(or
+			(member$ Action $?genPerf_)
+			(member$ Adventure $?genPerf_)
+			(member$ Arcade $?genPerf_)
+			(member$ Board $?genPerf_)
+			(member$ Card $?genPerf_)
+			(member$ Casino $?genPerf_)
+			(member$ Casual $?genPerf_)
+			(member$ Entertainment $?genPerf_)
+			(member$ Music $?genPerf_)
+			(member$ Puzzle $?genPerf_)
+			(member$ Racing $?genPerf_)
+			(member$ RolePlaying $?genPerf_)
+			(member$ Simulation $?genPerf_)
+			(member$ Strategy $?genPerf_)
+			(member$ Trivia $?genPerf_)
+			(member$ Word $?genPerf_)
+		)
+	))
+=>
+	(modify ?perfil_ (genero (insert$ $?genPerf_ 1 Games)))
 )
 
 

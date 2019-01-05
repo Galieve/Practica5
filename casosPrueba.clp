@@ -10272,10 +10272,10 @@
 
 (deffacts perfiles_init
 	(perfil (id "alguien") (edad 34) (sexo otro) (version "6.0") 
-	(aplicacionesInstaladas "Yandex.Weather"  "Yahoo! Weather for SH Forecast for understanding the approach of rain clouds Free" "Yahoo Weather" "Windguru Lite"
+	(aplicacionesInstaladas "VSCO" "Yandex.Weather"  "Yahoo! Weather for SH Forecast for understanding the approach of rain clouds Free" "Yahoo Weather" "Windguru Lite"
 		
 	)
-	(genero Weather)
+	(genero Photography Weather)
 	(gastoTotal 0) (gastoMaximo 0)
 	)
 	
@@ -10284,6 +10284,7 @@
 	(genero)
 	(gastoTotal 10) (gastoMaximo 10)
 	)
+
 )
 
 (deffacts peticion_init
