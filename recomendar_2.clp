@@ -23,10 +23,11 @@
 		(not (member$ Photography $?generoRec_))
 		(not (member$ Music $?generoRec_))
 		(not (member$ MusicAndAudio $?generoRec_))
+		(not (member$ Communication $?generoRec_))
 
 	))
 =>
-	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Social Dating Shopping Comics Personalization Photography Music MusicAndAudio)))
+	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Social Dating Shopping Comics Personalization Photography Music MusicAndAudio Communication)))
 )
 
 (defrule recomendarGenero_PetNula_Adulto
@@ -44,7 +45,7 @@
 		(not (member$ Communication $?generoRec_))
 	))
 =>
-	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Business Lifestyle HealthAndFitness NewsAndMagazines Communication Finance)))
+	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 Business Lifestyle HealthAndFitness NewsAndMagazines Finance Communication)))
 
 )
 
@@ -176,9 +177,9 @@
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
 	(test (member$ Games $?generoRec_))
 =>
-	(modify ?recomendacion_ (genero (insert$ (delete$ $?generoRec_ (member$ Games $?generoRec_) (member$ Games $?generoRec_)) 1 
-		Action Adventure Arcade Board Card Casino Casual Entertainment Music Puzzle Racing RolePlaying Simulation Strategy Trivia Word)))
-	
+	(bind $?generoRec_ (delete$ $?generoRec_ (member$ Games $?generoRec_) (member$ Games $?generoRec_)))
+	(modify ?recomendacion_ (genero (insert$ $?generoRec_ 1 
+		Action Adventure Arcade Board Card Casino Casual Entertainment Music Puzzle Racing RolePlaying Simulation Strategy Trivia Word)))	
 )
 
 

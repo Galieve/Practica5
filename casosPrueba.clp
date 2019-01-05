@@ -10284,6 +10284,7 @@
 	(genero)
 	(gastoTotal 10) (gastoMaximo 10)
 	)
+
 )
 
 (deffacts peticion_init
@@ -10294,5 +10295,5 @@
 
 (deffacts recomendacion_init
 	(recomendacion (id "nadie"))
-	;(recomendacion (id "alguien"))
+	(recomendacion (id "alguien"))
 )
