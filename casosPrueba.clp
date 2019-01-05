@@ -10279,10 +10279,10 @@
 	(gastoTotal 0) (gastoMaximo 0)
 	)
 	
-	(perfil (id "nadie") (edad 12) (sexo hombre) (version "3.0") 
+	(perfil (id "nadie") (edad 40) (sexo hombre) (version "7.0") 
 	(aplicacionesInstaladas )
 	(genero)
-	(gastoTotal 10) (gastoMaximo 10)
+	(gastoTotal 0) (gastoMaximo 0)
 	)
 
 )
