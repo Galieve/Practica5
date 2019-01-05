@@ -34,7 +34,7 @@
 )
 
 (defrule abrirCaja 
-	(declare (salience 1)) 
+	(declare (salience -1)) 
 	?producto_ <- (producto (nombre ?nom) (tipo ?t) (envuelto Si) (volumen ?v) (empaquetado No))
 =>
     (assert (caja (tipo ?t)))
@@ -42,12 +42,11 @@
 )
 
 (defrule empaquetar
-	(declare (salience 2))
     ?caja_ <- (caja (espacioLibre ?es) (tipo ?t) (listaProductos $?listaProductos))
     ?prod <- (producto (nombre ?nom) (tipo ?t) (envuelto Si) (volumen ?v) (empaquetado No) )
     (test (< ?v ?es)) ;; solo ejecuto regla si cumple test
 =>
     (modify ?caja_ (espacioLibre (- ?es ?v)) (listaProductos (insert$ $?listaProductos 1 ?prod)))
     (modify ?prod (empaquetado Si))
-    (printout t "Empaquetamos " ?nom" en caja, ahora con espacio libre: " (- ?es ?v)  crlf) 
+    (printout t "Empaquetamos " ?nom" en caja, que tenía "?es " unidades de espacio libre, pero ahora sólo tiene " (- ?es ?v) "." crlf) 
 )
