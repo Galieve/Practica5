@@ -62,5 +62,5 @@
 =>
     (modify ?caja_ (espacioLibre (- ?es ?v)) (listaProductos (insert$ $?listaProductos 1 ?prod)))
     (modify ?prod (empaquetado Si))
-    (printout t "Empaquetamos " ?nom" en caja, ahora con espacio libre: " (- ?es ?v)  crlf) 
+    (printout t "Empaquetamos " ?nom" en caja, que tenía "?es " unidades de espacio libre, pero ahora sólo tiene " (- ?es ?v) "." crlf) 
 )
