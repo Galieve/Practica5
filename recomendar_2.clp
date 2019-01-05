@@ -189,11 +189,8 @@
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
 	?peticion_ <- (peticion (id ?id_) (genero $?genPet_))
 	(test (eq (length$ $?genPet_) 0))
-	;(bind $?lastAppInstaladas (subseq$ $?apps_ 1 2))
-	;?n1 <- (nth$ 1 $?lastAppInstaladas)
-	;?n2 <- (nth$ 2 $?lastAppInstaladas)
-	(aplicacion (nombre ?n1&:(eq ?n1 (nth$ 1 (subseq$ $?apps_ 1 2)))) (genero ?g1))
-	(aplicacion (nombre ?n2&:(eq ?n1 (nth$ 2 (subseq$ $?apps_ 1 2)))) (genero ?g2))
+	(aplicacion (nombre ?n1&:(eq ?n1 (nth$ 1 $?apps_ ))) (genero ?g1))
+	(aplicacion (nombre ?n2&:(eq ?n1 (nth$ 2 $?apps_ ))) (genero ?g2))
 	(test (or
 		(not (member$ ?g1 ?generoRec_))
 		(not (member$ ?g2 ?generoRec_))
