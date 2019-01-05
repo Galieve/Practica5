@@ -20,3 +20,18 @@
 		(bind ?array (insertElementoUnico ?l ?array))
 	)
 )
+
+(deffunction conversionEdad_Num (?edadApp_)
+	(if (eq ?edadApp_  Everyone) then 0
+	else (
+		if (eq ?edadApp_ Everyone10+) then 10
+		else (
+			if (eq ?edadApp_ Teen) then 13
+			else (
+				if (eq ?edadApp_ Mature17+) then 17
+				else 18
+				)
+			)
+		)
+	)
+)

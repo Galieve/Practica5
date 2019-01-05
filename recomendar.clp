@@ -170,20 +170,6 @@
 ;Pedir pospodium < 3
 ;-------------------------------------------------------------------------
 
-(deffunction conversionEdad_Num (?edadApp_)
-	(if (eq ?edadApp_  Everyone) then 0
-	else (
-		if (eq ?edadApp_ Everyone10+) then 10
-		else (
-			if (eq ?edadApp_ Teen) then 13
-			else (
-				if (eq ?edadApp_ Mature17+) then 17
-				else 18
-				)
-			)
-		)
-	)
-)
 
 (defrule recomendarDescargas
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?aplicacionesInstaladas_))
@@ -383,9 +369,10 @@
 
 (defrule crearAppRecomendada
 	?appRecomendada_ <- (appRecomendada (id ?id_) (nombre ?nombre_) (posPodium ?posPodium_))
+	?peticion_ <- (peticion (id ?id_) (cantidadRecom ?cantidadRecom_))
 	(test(neq ?nombre_ ""))
 	(not (exists 	(appRecomendada (id ?id_) (posPodium ?posPodium2_))        (test(> ?posPodium2_ ?posPodium_))))
-	(test(< ?posPodium_ 3))
+	(test(< ?posPodium_ ?cantidadRecom_))
 =>
 	(assert (appRecomendada (id ?id_)		(posPodium	(+ ?posPodium_ 1) )))
 )

@@ -41,6 +41,7 @@
 	(slot espacioMax (type SYMBOL) (allowed-values ligera medio pesada null) (default null))
 	(slot valoracionMin (type INTEGER) (range -1 5) (default -1))
 	(multislot listaApps)
+	(slot cantidadRecom (type INTEGER) (range 1 ?VARIABLE) (default 3))
 )
 
 (deftemplate recomendacion
