@@ -10284,16 +10284,33 @@
 	(genero)
 	(gastoTotal 0) (gastoMaximo 0)
 	)
+	
+	(perfil 
+		(id "Violeta")
+		(edad 22) 
+		(sexo mujer) 
+		(version "5.2.7")
+		(aplicacionesInstaladas	"BeautyPlus - Easy Photo Editor & Selfie Camera" "eBay: Buy & Sell this Summer - Discover Deals Now!"
+			"Flipkart Online Shopping App" "BIGO LIVE - Live Stream" "Tik Tok - including musical.ly" "Tumblr" "Opera Mini - fast web browser"
+			"GO Launcher - 3D parallax Themes & HD Wallpapers" "B612 - Beauty & Filter Camera" "Photo Editor Collage Maker Pro" 
+			"YouCam Perfect - Selfie Photo Editor" "Wish - Shopping Made Fun" "Backgrounds HD (Wallpapers)" "Parallel Space - Multiple accounts & Two face"
+			"ZEDGEâ„¢ Ringtones & Wallpapers" "YouCam Makeup - Magic Selfie Makeovers" "Snapchat" "LINE: Free Calls & Messages" 
+			"PicsArt Photo Studio: Collage Maker & Pic Editor" "imo free video calls and chat" "Facebook Lite" "UC Browser - Fast Download Private & Secure"
+			"Google Duo - High Quality Video Calls" "Hangouts" "Messenger â€“ Text and Video Chat for Free" "Skype - free IM & video calls" "Facebook"
+			"Google+" "Viber Messenger" "Google Chrome: Fast & Secure" "Gmail" "WhatsApp Messenger" "Google Photos" "Instagram" "Pinterest" "The birth"
+			"Backgrounds (HD Wallpapers)")
+
+		(genero Communication Photography Social Shopping Personalization)
+		(gastoTotal 0)
+		(gastoMaximo 0)
+		
+	)		
 
 )
 
 (deffacts peticion_init
 	(peticion (id "nadie") (genero) (edadDestinatario -1) (prioridad descargas) (espacioMax medio) (valoracionMin 3))
-	(peticion (id "alguien") (genero) (espacioMax medio) (valoracionMin 4))
+	(peticion (id "alguien") (espacioMax medio) (valoracionMin 4) (genero Dating) (edadDestinatario 25))
+	(peticion (id "Violeta") (espacioMax ligera) (valoracionMin 4) (prioridad descargas) (cantidadRecom 10))
 
-)
-
-(deffacts recomendacion_init
-	;(recomendacion (id "nadie"))
-	(recomendacion (id "alguien"))
 )

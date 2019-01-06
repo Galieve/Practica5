@@ -35,3 +35,7 @@
 		)
 	)
 )
+
+(deffunction instalar (?id_ ?nombreApp_)
+	(assert (installQuery (id ?id_) (nombre ?nombreApp_)))
+)

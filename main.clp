@@ -1,6 +1,3 @@
-
-;(defmodule MAIN (import TEMPLATES ?ALL) (import RECOMENDAR ?ALL) (import CASOS_PRUEBA ?ALL) )
-
 (deftemplate inicial)
 
 (defrule main
@@ -8,8 +5,8 @@
 =>
 	(load "templates.clp")
 	(load "funciones.clp")
-	(load "recomendar.clp")
-	(load "recomendar_2.clp")
+	(load "reglas de recomendación.clp")
+	(load "reglas de recomendación de géneros.clp")
 	(load "entrada_salida.clp")
 	(load "casosPrueba.clp")
 	(reset)
