@@ -337,8 +337,9 @@
 	?appRecomendada <- (appRecomendada (id ?id_) (nombre ?n) (posPodium ?pos_))
 =>
 	(printout t "La "?pos_"ª aplicación que se le recomienda instalar es: " ?n crlf)
-	(printout t "Esperemos que le interese." crlf)
+	(printout t "Esperamos que le interese." crlf)
 	(modify ?printQuery_ (pos (+ ?pos_ 1)))
+	(retract ?appRecomendada)
 	
 )
 
@@ -357,7 +358,7 @@
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?aplicacionesInstaladas_) (genero $?genero_) 
 					(gastoTotal ?gastoTotal_) (gastoMaximo ?gastoMaximo_))
 	(aplicacion (nombre ?nombreApp_) (genero ?generoApp_) (precio ?precio_))
-	(test (not (member$ ?nombreApp_ $?aplicacionesInstaladas_)) )
+	(test (not (member$ ?nombreApp_ ?aplicacionesInstaladas_)) )
 =>
 	(bind ?aplicacionesInstaladas_(insertElementoUnico ?nombreApp_ $?aplicacionesInstaladas_))
 	(bind ?genero_ (insertElementoUnico ?generoApp_ $?genero_))
