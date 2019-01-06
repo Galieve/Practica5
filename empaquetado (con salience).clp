@@ -6,6 +6,13 @@
     (slot empaquetado (type SYMBOL) (allowed-values Si No) (default No))
 )
 
+
+(deftemplate caja
+    (slot espacioLibre (type NUMBER) (default 200))
+    (slot tipo (type SYMBOL))
+	(multislot listaProductos (default create$) )
+)
+
 (deffacts prod_init
     (producto (nombre tomates)(tipo fragil)(envuelto Si)(volumen 60))
     (producto (nombre patatas)(tipo pesado)(envuelto Si)(volumen 150))
@@ -25,13 +32,7 @@
 
 )
 
-
-
-(deftemplate caja
-    (slot espacioLibre (type NUMBER) (default 200))
-    (slot tipo (type SYMBOL))
-	(multislot listaProductos (default create$) )
-)
+;----------------------------------Reglas----------------------------------
 
 (defrule abrirCaja 
 	(declare (salience -1)) 
@@ -48,5 +49,5 @@
 =>
     (modify ?caja_ (espacioLibre (- ?es ?v)) (listaProductos (insert$ $?listaProductos 1 ?prod)))
     (modify ?prod (empaquetado Si))
-    (printout t "Empaquetamos " ?nom" en caja, que tenía "?es " unidades de espacio libre, pero ahora sólo tiene " (- ?es ?v) "." crlf) 
-)
+    (printout t "Empaquetamos " ?nom" en una caja que tenía "?es " unidades de espacio libre." crlf 
+		"Ahora dicha caja sólo tiene " (- ?es ?v) " unidades de espacio libre." crlf) )
