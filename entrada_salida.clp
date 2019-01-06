@@ -54,7 +54,7 @@
 				)
 			)
 		)
-		(printout t crlf "Petición tramitada, gracias por su tiempo." crlf)
+		(printout t crlf "Instrucción tramitada, gracias por su tiempo." crlf)
 		(if (member$ ?menu (create$ 1 2 3 4 5)) then (printout t "Continue con su petición por favor." crlf crlf))		
 	)
 	(bind ?menu -1)
