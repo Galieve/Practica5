@@ -23,7 +23,7 @@
 	(bind ?generoPeticion (create$))
 	(bind ?edadPeticion -1)
 	(bind ?prioridadPeticion descargas)
-	(bind ?espacioMaxPeticion null)
+	(bind ?espacioPeticion null)
 	(bind ?valoracionMinPeticion -1)
 	(bind ?cantidadRecom_ 3)
 	(while (neq ?menu 0) do
@@ -41,7 +41,7 @@
 					(bind ?prioridadPeticion (readline))
 				else (if (eq ?menu 4) then
 						(printout t "Escribe el tipo de aplicación que busca (ligera medio pesada): ")
-						(bind ?espacioMaxPeticion (readline))
+						(bind ?espacioPeticion (readline))
 					else (if (eq ?menu 5) then
 							(printout t "Escribe la valoracion minima (entero entre 0 y 5): ")
 							(bind ?valoracionMinPeticion (readline))
@@ -60,7 +60,7 @@
 	(bind ?menu -1)
 	(assert-string (str-cat 
 		"(peticion (id " ?idPeticion ") (genero " (implode$ ?generoPeticion) ") (edadDestinatario " ?edadPeticion 
-		") (prioridad " ?prioridadPeticion ") (espacioMax " ?espacioMaxPeticion ") (valoracionMin " 
+		") (prioridad " ?prioridadPeticion ") (espacio " ?espacioPeticion ") (valoracionMin " 
 		?valoracionMinPeticion ") (cantidadRecom " ?cantidadRecom_"))"
 	))
 )

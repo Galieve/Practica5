@@ -38,7 +38,7 @@
 	(multislot genero)
 	(slot edadDestinatario (type INTEGER) (range -1 ?VARIABLE) (default -1))
 	(slot prioridad (type SYMBOL) (allowed-values espacio descargas valoracion) (default descargas))
-	(slot espacioMax (type SYMBOL) (allowed-values ligera medio pesada null) (default null))
+	(slot espacio (type SYMBOL) (allowed-values ligera medio pesada null) (default null))
 	(slot valoracionMin (type INTEGER) (range -1 5) (default -1))
 	(multislot listaApps)
 	(slot cantidadRecom (type INTEGER) (range 1 ?VARIABLE) (default 3))

@@ -10309,8 +10309,8 @@
 )
 
 (deffacts peticion_init
-	(peticion (id "nadie") (genero) (edadDestinatario -1) (prioridad descargas) (espacioMax medio) (valoracionMin 3))
-	(peticion (id "alguien") (espacioMax medio) (valoracionMin 4) (genero Dating) (edadDestinatario 25))
-	(peticion (id "Violeta") (espacioMax ligera) (valoracionMin 4) (prioridad descargas) (cantidadRecom 10))
+	;(peticion (id "nadie") (genero) (edadDestinatario -1) (prioridad descargas) (espacio medio) (valoracionMin 3))
+	;(peticion (id "alguien") (espacio medio) (valoracionMin 4) (genero Dating) (edadDestinatario 25))
+	(peticion (id "Violeta") (espacio ligera) (valoracionMin 4) (prioridad descargas) (cantidadRecom 10))
 
 )
