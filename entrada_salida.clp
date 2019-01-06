@@ -43,8 +43,10 @@
 						(printout t "Escribe el tipo de aplicación que busca (ligera medio pesada): ")
 						(bind ?espacioPeticion (readline))
 					else (if (eq ?menu 5) then
-							(printout t "Escribe la valoracion minima (entero entre 0 y 5): ")
-							(bind ?valoracionMinPeticion (readline))
+							(printout t "Escribe la valoracion minima (entre 0 y 5): ")
+							(bind ?valoracionMinPeticion (float (string-to-field (readline))))
+							(bind ?valoracionMinPeticion (min ?valoracionMinPeticion 5))
+							(bind ?valoracionMinPeticion (max ?valoracionMinPeticion 0))
 						else (if (eq ?menu 6) then
 								(printout t "Escribe el número de aplicaciones a recomendar: ")
 								(bind ?cantidadRecom_ (readline))

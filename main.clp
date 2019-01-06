@@ -9,7 +9,7 @@
 	(load "reglas de recomendación de géneros.clp")
 	(load "misc.clp")
 	(load "entrada_salida.clp")
-	(load " de .clp")
+	(load "casos de prueba.clp")
 	(reset)
 	(assert (inicial))	
 )
