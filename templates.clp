@@ -62,6 +62,12 @@
 	(slot posPodium (type INTEGER) (range 1 ?VARIABLE))
 )
 
-(deftemplate entrada_salida
-	(slot tipo (allowed-values peticion perfil) (default peticion))
+(deftemplate printQuery
+	(slot id (type STRING) (default ""))
+	(slot pos (type INTEGER) (range 1 ?VARIABLE) (default 1))
+)
+
+(deftemplate installQuery
+	(slot id (type STRING) (default ""))
+	(slot nombre (type STRING))
 )
