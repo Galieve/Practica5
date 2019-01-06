@@ -42,7 +42,7 @@
 	(slot valoracionMin (type INTEGER) (range -1 5) (default -1))
 	(multislot listaApps)
 	(slot cantidadRecom (type INTEGER) (range 1 ?VARIABLE) (default 3))
-	(slot satisfecha (allowed-values Si No) (default No)) ;--Sin implementar #TODO
+	(slot satisfecha (allowed-values Si No) (default No))
 )
 
 (deftemplate recomendacion
@@ -59,6 +59,9 @@
 (deftemplate appRecomendada
 	(slot nombre (type STRING) (default ""))
 	(slot id (type STRING))
-	(slot posPodium (type INTEGER) (range 1 3))
+	(slot posPodium (type INTEGER) (range 1 ?VARIABLE))
 )
 
+(deftemplate entrada_salida
+	(slot tipo (allowed-values peticion perfil) (default peticion))
+)

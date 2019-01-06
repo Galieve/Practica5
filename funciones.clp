@@ -35,3 +35,5 @@
 		)
 	)
 )
+
+;(deffunction peticion ()	(assert (entrada_salida (tipo peticion))) )

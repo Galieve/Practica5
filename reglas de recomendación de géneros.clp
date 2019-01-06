@@ -1,7 +1,28 @@
+;--------------------------Reglas de Género---------------------------------
+
+(defrule recomendarGeneroPeticionNoNula
+	?recomendacion_ <- (recomendacion (id ?id_) (ready No) (genero $?generoRec_&:(eq (length$ $?generoRec_) 0)))
+	?peticion_ <- (peticion (id ?id_) (genero $?genP_) (satisfecha No))
+	(test (neq (length$ $?genP_) 0))
+=>
+	(modify ?recomendacion_ (genero ?genP_))
+)
+
+;#TODO
+(defrule recomendarGeneroPeticionNulaMuchasApps
+	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_))
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No) )
+	?peticion_ <- (peticion (id ?id_) (genero $?genP_&:(eq  (length$ $?genP_) 0)) (satisfecha No))
+	(test (eq (length$ $?generoRec_) 0))
+	(test(>=  (length$ $?apps_) 30))	
+=>
+	(modify ?recomendacion_ (genero ?genPerf_))
+)
+
 (defrule recomendarGenero_PetNula_Joven
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_) (edad ?edad_&:(and(>= ?edad_ 18) (< ?edad_ 30))))
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
-	?peticion_ <- (peticion (id ?id_) (genero $?genPet_)) 
+	?peticion_ <- (peticion (id ?id_) (genero $?genPet_) (satisfecha No)) 
 	(test(eq (length$ $?genPet_) 0))
 	(test(<  (length$ $?apps_) 30))
 	(test (or
@@ -26,7 +47,7 @@
 (defrule recomendarGenero_PetNula_Adulto
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_) (edad ?edad_&:(and(>= ?edad_ 30) (< ?edad_ 50))))
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
-	?peticion_ <- (peticion (id ?id_) (genero $?genPet_)) 
+	?peticion_ <- (peticion (id ?id_) (genero $?genPet_) (satisfecha No)) 
 	(test(eq (length$ $?genPet_) 0))
 	(test(<  (length$ $?apps_) 30))
 	(test (or
@@ -46,7 +67,7 @@
 (defrule recomendarGenero_PetNula_MasAdulto
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_) (edad ?edad_&:(>= ?edad_ 50) ))
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
-	?peticion_ <- (peticion (id ?id_) (genero $?genPet_)) 
+	?peticion_ <- (peticion (id ?id_) (genero $?genPet_) (satisfecha No)) 
 	(test(eq (length$ $?genPet_) 0))
 	(test(<  (length$ $?apps_) 30))
 	(test (or
@@ -65,7 +86,7 @@
 (defrule recomendarGenero_PetNula_Menor
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_) (edad ?edad_&:(< ?edad_ 18)))
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
-	?peticion_ <- (peticion (id ?id_) (genero $?genPet_)) 
+	?peticion_ <- (peticion (id ?id_) (genero $?genPet_) (satisfecha No)) 
 	(test(eq (length$ $?genPet_) 0))
 	(test(<  (length$ $?apps_) 30))
 	(test (or
@@ -82,7 +103,7 @@
 (defrule recomendarGenero_PetNula_AppsModa
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_) )
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
-	?peticion_ <- (peticion (id ?id_) (genero $?genPet_)) 
+	?peticion_ <- (peticion (id ?id_) (genero $?genPet_) (satisfecha No)) 
 	(test(eq (length$ $?genPet_) 0))
 	(test(<  (length$ $?apps_) 30))
 	
@@ -101,7 +122,7 @@
 (defrule recomendarGenero_PetNula_MujerJoven
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_) (sexo mujer) (edad ?ed&:(< ?ed 30)) )
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
-	?peticion_ <- (peticion (id ?id_) (genero $?genPet_)) 
+	?peticion_ <- (peticion (id ?id_) (genero $?genPet_) (satisfecha No)) 
 	(test(eq (length$ $?genPet_) 0))
 	(test(<  (length$ $?apps_) 30))
 	(test (or
@@ -117,7 +138,7 @@
 (defrule recomendarGenero_PetNula_MujerAdulta
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_) (sexo mujer) (edad ?ed&:(>= ?ed 30)) )
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
-	?peticion_ <- (peticion (id ?id_) (genero $?genPet_)) 
+	?peticion_ <- (peticion (id ?id_) (genero $?genPet_) (satisfecha No)) 
 	(test(eq (length$ $?genPet_) 0))
 	(test(<  (length$ $?apps_) 30))
 	(test (or
@@ -134,7 +155,7 @@
 (defrule recomendarGenero_PetNula_HombreJoven
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_) (sexo hombre) (edad ?ed&:(< ?ed 30)) )
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
-	?peticion_ <- (peticion (id ?id_) (genero $?genPet_)) 
+	?peticion_ <- (peticion (id ?id_) (genero $?genPet_) (satisfecha No)) 
 	(test(eq (length$ $?genPet_) 0))
 	(test(<  (length$ $?apps_) 30))
 	(test (or
@@ -156,7 +177,7 @@
 (defrule recomendarGenero_PetNula_HombreAdulto
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_) (sexo hombre) (edad ?ed&:(>= ?ed 30)) )
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
-	?peticion_ <- (peticion (id ?id_) (genero $?genPet_)) 
+	?peticion_ <- (peticion (id ?id_) (genero $?genPet_) (satisfecha No)) 
 	(test (eq (length$ $?genPet_) 0))
 	(test (<  (length$ $?apps_) 30))
 	(test (or
@@ -187,7 +208,7 @@
 (defrule recomendarGeneroUltimasAppsInstaladas
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?apps_) (genero $?genPerf_)  )
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
-	?peticion_ <- (peticion (id ?id_) (genero $?genPet_))
+	?peticion_ <- (peticion (id ?id_) (genero $?genPet_) (satisfecha No))
 	(test (eq (length$ $?genPet_) 0))
 	(aplicacion (nombre ?n1&:(eq ?n1 (nth$ 1 $?apps_ ))) (genero ?g1))
 	(aplicacion (nombre ?n2&:(eq ?n1 (nth$ 2 $?apps_ ))) (genero ?g2))
