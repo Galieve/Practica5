@@ -10271,12 +10271,14 @@
 )
 
 (deffacts perfiles_init
-	(perfil (id "alguien") (edad 34) (sexo otro) (version "6.0") 
-	(aplicacionesInstaladas "VSCO" "Yandex.Weather"  "Yahoo! Weather for SH Forecast for understanding the approach of rain clouds Free" "Yahoo Weather" "Windguru Lite"
-		
-	)
-	(genero Photography Weather)
-	(gastoTotal 0) (gastoMaximo 0)
+	(perfil 
+		(id "Begonia") 
+		(edad 34) 
+		(sexo mujer) (version "6.2.7") 
+		(aplicacionesInstaladas "YouTube Kids" "Yahoo Weather")
+		(genero Entertainment Weather)
+		(gastoTotal 0)
+		(gastoMaximo 0)
 	)
 	
 	(perfil 
@@ -10314,8 +10316,8 @@
 )
 
 (deffacts peticion_init
-	;(peticion (id "nadie") (genero) (edadDestinatario -1) (prioridad descargas) (espacio medio) (valoracionMin 3))
-	(peticion (id "Narciso") (espacio pesada) (prioridad valoracion) (genero)(valoracionMin 4.5) (cantidadRecom 5))
+	(peticion (id "Begonia") (genero Education Educational Entertainment) (edadDestinatario 5) (prioridad espacio) (espacio medio) (valoracionMin 4.65) (cantidadRecom 5))
+	;(peticion (id "Narciso") (espacio pesada) (prioridad valoracion) (genero)(valoracionMin 4.5) (cantidadRecom 5))
 	;(peticion (id "Violeta") (espacio ligera) (valoracionMin 4) (prioridad descargas) (cantidadRecom 10))
 
 )
