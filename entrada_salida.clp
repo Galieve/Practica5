@@ -4,7 +4,7 @@
 
 (deffunction menu ()
 	(printout t "Las opciones permitidas son:" crlf )
-	(printout t "1: Añadir género." crlf)
+	(printout t "1: Especificar el género de la recomendación." crlf)
 	(printout t "2: Deteriminar la edad del usuario final de la aplicación." crlf)
 	(printout t "3: Determinar prioridad por la que se recomiendan las aplicaciones (descargas valoracion espacio)." crlf)
 	(printout t "4: Determinar el espacio máximo que ocuparán las aplicaiones." crlf)
@@ -30,7 +30,7 @@
 		(menu)
 		(bind ?menu (read))
 		(if (eq ?menu 1) then 
-			(printout t "Inserta el genero: ")
+			(printout t "Escriba el género: ")
 			(bind ?nombreGeneroPeticion (read))
 			(bind ?generoPeticion (insert$ $?generoPeticion 1 ?nombreGeneroPeticion ))
 		else (if (eq ?menu 2) then

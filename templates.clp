@@ -52,6 +52,7 @@
 	(slot espacio (type SYMBOL) (allowed-values ligera medio pesada null) (default null))
 	(slot precioMaximo (type NUMBER) (range -1 ?VARIABLE) (default -1))
 	(slot valoracionMin (type NUMBER) (range -1 5) (default -1))
+	(slot version (type STRING) (default ""))
 	(slot ready (allowed-values Si No) (default No))
 )
 
