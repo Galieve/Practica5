@@ -70,6 +70,15 @@
 	(modify ?recomendacion_ (valoracionMin ?valMin_))
 )
 
+;---------------------------Reglas de Version--------------------------------
+
+(defrule recomendarVersion
+	?recomendacion_ <- (recomendacion (id ?id_) (ready No) (version "") )
+	?perfil_ <- (perfil (id ?id_) (version ?v)) 
+=>
+	(modify ?recomendacion_ (version ?v))		
+)
+
 ;---------------------------Reglas de Espacio--------------------------------
 
 (defrule recomendarEspacioPedido
@@ -110,12 +119,12 @@
 	(modify ?recomendacion_ (espacio pesada))
 )
 	
-;----------------------Fin de la recomendaciÃ³n----------------------------
+;----------------------Fin de la recomendación----------------------------
 
 (defrule setReady
 	(declare (salience -11))
-	?recomendacion_ <- (recomendacion (id ?id_) (genero $?genero_) (edadApp ?edad_&:(neq ?edad_ -1)) 
-		(espacio ?espacio_&:(neq ?espacio_ null)) (precioMaximo ?precioMax_&:(neq ?precioMax_ -1)) (ready No))
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?genero_) (edadApp  ~-1) 
+		(espacio ~null) (precioMaximo ~-1) (version ~"") (ready No))
 	(test(neq (length$ $?genero_) 0))
 =>
 	(modify ?recomendacion_ (ready Si))
@@ -128,12 +137,13 @@
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?aplicacionesInstaladas_))
 	?peticion_ <- (peticion (id ?id_) (prioridad descargas) (listaApps $?listaApps_) (satisfecha No))
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_)
-		(ready Si)(valoracionMin ?valoracionMin_))
+		(ready Si)(valoracionMin ?valoracionMin_) (version ?version_))
 	?appRecomendada_ <- (appRecomendada (id ?id_) (nombre "") (posPodium ?posPodium_))
 	?aplicacion_ <- (aplicacion (nombre ?nombreApp_) (valoracion ?valoracion_) (reviews ?reviews_) (espacio ?espacioApp_) (descargas ?descargasApp_)
 		(precio ?precio_) (ultimaActualizacion ?ultimaActualizacion_) (androidVersion ?androidVersion_) (genero ?generoApp_) (edad ?edadApp_))
 	
 	(test (not (member$ ?nombreApp_ ?aplicacionesInstaladas_)))
+	(test (or (> (str-compare ?version_ ?androidVersion_) 0) (eq ?androidVersion_ "Varies with device")))
 	(test(>= ?edad_ (conversionEdad_Num ?edadApp_)))
 	(test(>= ?descargasApp_ 50000))
 	(test(>= ?reviews_ 5000))
@@ -160,6 +170,7 @@
 			(precio ?precio_2&:(<= ?precio_2 ?precioMax_)) 
 			(genero ?generoApp_2&:(member$ ?generoApp_2 ?genero_))
 			(edad ?edadApp_2&:(>= ?edad_ (conversionEdad_Num ?edadApp_2)))
+			(androidVersion ?androidVersion_2&:(> (str-compare ?version_ ?androidVersion_2)0))
 		)
 			
 		(test(or		
@@ -183,13 +194,13 @@
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?aplicacionesInstaladas_))
 	?peticion_ <- (peticion (id ?id_) (prioridad valoracion) (listaApps $?listaApps_) (satisfecha No))
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_) 
-		(ready Si) (valoracionMin ?valoracionMin_))
+		(ready Si) (valoracionMin ?valoracionMin_) (version ?version_))
 	?appRecomendada_ <- (appRecomendada (id ?id_) (nombre "") (posPodium ?posPodium_))
 	?aplicacion_ <- (aplicacion (nombre ?nombreApp_) (valoracion ?valoracion_) (reviews ?reviews_) (espacio ?espacioApp_) (descargas ?descargasApp_)
 		(precio ?precio_) (ultimaActualizacion ?ultimaActualizacion_) (androidVersion ?androidVersion_) (genero ?generoApp_) (edad ?edadApp_))
 	
 	(test (not (member$ ?nombreApp_ ?aplicacionesInstaladas_)))
-	
+	(test (or (> (str-compare ?version_ ?androidVersion_) 0) (eq ?androidVersion_ "Varies with device")))
 	(test(>= ?edad_ (conversionEdad_Num ?edadApp_)))
 	(test(>= ?descargasApp_ 50000))
 	(test(>= ?reviews_ 5000))
@@ -217,6 +228,7 @@
 			(precio ?precio_2&:(<= ?precio_2 ?precioMax_)) 
 			(genero ?generoApp_2&:(member$ ?generoApp_2 ?genero_))
 			(edad ?edadApp_2&:(>= ?edad_ (conversionEdad_Num ?edadApp_2)))
+			(androidVersion ?androidVersion_2&:(or (> (str-compare ?version_ ?androidVersion_2) 0) (eq ?androidVersion_ "Varies with device")))
 		)
 			
 		(test(or		
@@ -239,13 +251,13 @@
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?aplicacionesInstaladas_))
 	?peticion_ <- (peticion (id ?id_) (prioridad espacio) (listaApps $?listaApps_) (satisfecha No))
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_)
-		(ready Si) (valoracionMin ?valoracionMin_))
+		(ready Si) (valoracionMin ?valoracionMin_) (version ?version_))
 	?appRecomendada_ <- (appRecomendada (id ?id_) (nombre "") (posPodium ?posPodium_))
 	?aplicacion_ <- (aplicacion (nombre ?nombreApp_) (valoracion ?valoracion_) (reviews ?reviews_) (espacio ?espacioApp_) (descargas ?descargasApp_)
 		(precio ?precio_) (ultimaActualizacion ?ultimaActualizacion_) (androidVersion ?androidVersion_) (genero ?generoApp_) (edad ?edadApp_))
 	
 	(test (not (member$ ?nombreApp_ ?aplicacionesInstaladas_)))
-	
+	(test (or (> (str-compare ?version_ ?androidVersion_) 0) (eq ?androidVersion_ "Varies with device")))
 	(test(>= ?edad_ (conversionEdad_Num ?edadApp_)))
 	(test(>= ?descargasApp_ 50000))
 	(test(>= ?reviews_ 5000))
@@ -274,6 +286,7 @@
 			(precio ?precio_2&:(<= ?precio_2 ?precioMax_)) 
 			(genero ?generoApp_2&:(member$ ?generoApp_2 ?genero_))
 			(edad ?edadApp_2&:(>= ?edad_ (conversionEdad_Num ?edadApp_2)))
+			(androidVersion ?androidVersion_2&:(or (> (str-compare ?version_ ?androidVersion_2) 0) (eq ?androidVersion_ "Varies with device")))
 		)
 			
 		(test(or		

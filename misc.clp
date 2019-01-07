@@ -67,29 +67,4 @@
 	(retract ?iq_)
 )
 
-(defrule updatePerfilJuegos
-	?perfil_ <- (perfil (id ?id_) (genero $?genPerf_) )
-	(test (and
-		(not (member$ Games $?genPerf_))
-		(or
-			(member$ Action $?genPerf_)
-			(member$ Adventure $?genPerf_)
-			(member$ Arcade $?genPerf_)
-			(member$ Board $?genPerf_)
-			(member$ Card $?genPerf_)
-			(member$ Casino $?genPerf_)
-			(member$ Casual $?genPerf_)
-			(member$ Entertainment $?genPerf_)
-			(member$ Music $?genPerf_)
-			(member$ Puzzle $?genPerf_)
-			(member$ Racing $?genPerf_)
-			(member$ RolePlaying $?genPerf_)
-			(member$ Simulation $?genPerf_)
-			(member$ Strategy $?genPerf_)
-			(member$ Trivia $?genPerf_)
-			(member$ Word $?genPerf_)
-		)
-	))
-=>
-	(modify ?perfil_ (genero (insert$ $?genPerf_ 1 Games)))
-)
+
