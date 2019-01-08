@@ -210,14 +210,13 @@
 	?peticion_ <- (peticion (id ?id_) (genero $?genPet_) (satisfecha No))
 	(test (eq (length$ $?genPet_) 0))
 	(aplicacion (nombre ?n1&:(eq ?n1 (nth$ 1 $?apps_ ))) (genero ?g1))
-	(aplicacion (nombre ?n2&:(eq ?n1 (nth$ 2 $?apps_ ))) (genero ?g2))
+	(aplicacion (nombre ?n2&:(eq ?n2 (nth$ 2 $?apps_ ))) (genero ?g2))
 	(test (or
 		(not (member$ ?g1 ?generoRec_))
 		(not (member$ ?g2 ?generoRec_))
 	))
 =>
-	(insertElementoUnico ?g1 ?generoRec_)
-	(insertElementoUnico ?g2 ?generoRec_)
+	(bind $?generoRec_ (insertListElementoUnico (create$ ?g1 ?g2) ?generoRec_))
 	(modify ?recomendacion_ (genero $?generoRec_ ))
 	
 )
