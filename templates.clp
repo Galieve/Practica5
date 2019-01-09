@@ -8,7 +8,7 @@
 	(slot descargas (type INTEGER) (range 0 ?VARIABLE)) 
 	(slot precio (type NUMBER) (range 0 ?VARIABLE))
 	(slot edad (type SYMBOL) (allowed-values Adultsonly18+ Everyone Everyone10+ Mature17+ Teen Unrated ))
-	(slot genero (type SYMBOL) (allowed-values Games Action Adventure Arcade ArtAndDesign AutoAndVehicles Beauty Board BooksAndReference
+	(slot genero (type SYMBOL) (allowed-values All Games Action Adventure Arcade ArtAndDesign AutoAndVehicles Beauty Board BooksAndReference
 		Business Card Casino Casual Comics Communication Dating Education Educational Entertainment Events Finance FoodAndDrink 
 		HealthAndFitness HouseAndHome LibrariesAndDemo Lifestyle MapsAndNavigation Medical Music MusicAndAudio NewsAndMagazines 
 		Parenting Personalization Photography Productivity Puzzle Racing RolePlaying Shopping Simulation Social Sports Strategy 
@@ -33,7 +33,7 @@
 	(slot id (type STRING))
 	(multislot genero)
 	(slot edadDestinatario (type INTEGER) (range -1 ?VARIABLE) (default -1))
-	(slot prioridad (type SYMBOL) (allowed-values espacio descargas valoracion) (default descargas))
+	(slot prioridad (type SYMBOL) (allowed-values espacio descargas valoracion precioAsc precioDesc) (default descargas))
 	(slot espacio (type SYMBOL) (allowed-values ligera medio pesada null) (default null))
 	(slot valoracionMin (type NUMBER) (range -1 5) (default -1))
 	(multislot listaApps)

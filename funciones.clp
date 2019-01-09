@@ -37,5 +37,5 @@
 )
 
 (deffunction instalar (?id_ ?nombreApp_)
-	(assert (installQuery (id (str-cat "\"" ?id_ "\"")) (nombre ?nombreApp_)))
+	(assert (installQuery (id (str-cat ?id_ )) (nombre ?nombreApp_)))
 )
