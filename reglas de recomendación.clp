@@ -178,9 +178,8 @@
 				(and (eq ?descargasApp_ ?descargasApp_2) (>= ?valoracion_ ?valoracion_2))
 			)
 		)
-	)	
-	(forall (appRecomendada (nombre ?nombre_2) (id ?id_) (posPodium ?posPodium2_&:(neq ?posPodium2_ ?posPodium_)))
-						(test (neq ?nombre_2 ?nombreApp_)))
+	)
+	(test (not (member$ ?nombreApp_ $?listaApps_)))
 	
 
 	
@@ -236,12 +235,8 @@
 				(and (eq ?valoracion_ ?valoracion_2) (>= ?descargasApp_ ?descargasApp_2))
 			)
 		)
-	)	
-	(forall (appRecomendada (nombre ?nombre_2) (id ?id_) (posPodium ?posPodium2_&:(neq ?posPodium2_ ?posPodium_)))
-						(test (neq ?nombre_2 ?nombreApp_)))
-	
-
-	
+	)
+	(test (not (member$ ?nombreApp_ $?listaApps_)))	
 =>
 	(modify ?peticion_ (listaApps (insert$ $?listaApps_ 1 ?nombreApp_)))
 	(modify ?appRecomendada_ (nombre ?nombreApp_)) 
@@ -294,11 +289,8 @@
 				(and (eq ?espacioApp_ ?espacioApp_2) (>= ?valoracion_ ?valoracion_2))
 			)
 		)
-	)	
-	(forall (appRecomendada (nombre ?nombre_2) (id ?id_) (posPodium ?posPodium2_&:(neq ?posPodium2_ ?posPodium_)))
-						(test (neq ?nombre_2 ?nombreApp_)))
-	
-
+	)
+	(test (not (member$ ?nombreApp_ $?listaApps_)))
 	
 =>
 	(modify ?peticion_ (listaApps (insert$ $?listaApps_ 1 ?nombreApp_)))
