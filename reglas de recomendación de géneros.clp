@@ -28,9 +28,7 @@
 		(not (member$ Social $?generoRec_))
 		(not (member$ Dating $?generoRec_))
 		(not (member$ Shopping $?generoRec_))
-		(not (member$ Comics $?generoRec_))
 		(not (member$ Personalization $?generoRec_))
-		(not (member$ Photography $?generoRec_))
 		(not (member$ Music $?generoRec_))
 		(not (member$ MusicAndAudio $?generoRec_))
 		(not (member$ Communication $?generoRec_))
@@ -38,7 +36,7 @@
 	))
 =>
 	(bind $?generoRec_ (insertListElementoUnico
-		(create$ Social Dating Shopping Comics Personalization Photography Music MusicAndAudio Communication)
+		(create$ Social Dating Shopping Personalization Music MusicAndAudio Communication)
 		?generoRec_))
 	(modify ?recomendacion_ (genero $?generoRec_))
 )
@@ -195,7 +193,7 @@
 	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
 	(test (member$ Games $?generoRec_))
 =>
-	(bind $?generoRec_ (delete$ $?generoRec_ (member$ Games $?generoRec_) (member$ Games $?generoRec_)))
+	(bind $?generoRec_ (delete-member$ $?generoRec_ Games))
 	(bind $?generoRec_ (insertListElementoUnico 
 		(create$ Action Adventure Arcade Board Card Casino Casual Entertainment Music Puzzle Racing RolePlaying Simulation Strategy Trivia Word)
 		?generoRec_))

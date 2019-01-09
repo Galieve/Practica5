@@ -33,7 +33,7 @@
 	(test(>= (length$ $?apps_) 30))
 	(test(<  (/ ?gt (length$ $?apps_)) 0.63))
 =>
-	(modify ?recomendacion_ (precioMaximo ?gm))
+	(modify ?recomendacion_ (precioMaximo (* ?gm 1.2)))
 )
 
 ;-----------------------Reglas de Edad------------------------------
@@ -140,7 +140,7 @@
 		(ready Si)(valoracionMin ?valoracionMin_) (version ?version_))
 	?appRecomendada_ <- (appRecomendada (id ?id_) (nombre "") (posPodium ?posPodium_))
 	?aplicacion_ <- (aplicacion (nombre ?nombreApp_) (valoracion ?valoracion_) (reviews ?reviews_) (espacio ?espacioApp_) (descargas ?descargasApp_)
-		(precio ?precio_) (ultimaActualizacion ?ultimaActualizacion_) (androidVersion ?androidVersion_) (genero ?generoApp_) (edad ?edadApp_))
+		(precio ?precio_) (androidVersion ?androidVersion_) (genero ?generoApp_) (edad ?edadApp_))
 	
 	(test (not (member$ ?nombreApp_ ?aplicacionesInstaladas_)))
 	(test (or (> (str-compare ?version_ ?androidVersion_) 0) (eq ?androidVersion_ "Varies with device")))
@@ -197,7 +197,7 @@
 		(ready Si) (valoracionMin ?valoracionMin_) (version ?version_))
 	?appRecomendada_ <- (appRecomendada (id ?id_) (nombre "") (posPodium ?posPodium_))
 	?aplicacion_ <- (aplicacion (nombre ?nombreApp_) (valoracion ?valoracion_) (reviews ?reviews_) (espacio ?espacioApp_) (descargas ?descargasApp_)
-		(precio ?precio_) (ultimaActualizacion ?ultimaActualizacion_) (androidVersion ?androidVersion_) (genero ?generoApp_) (edad ?edadApp_))
+		(precio ?precio_) (androidVersion ?androidVersion_) (genero ?generoApp_) (edad ?edadApp_))
 	
 	(test (not (member$ ?nombreApp_ ?aplicacionesInstaladas_)))
 	(test (or (> (str-compare ?version_ ?androidVersion_) 0) (eq ?androidVersion_ "Varies with device")))
@@ -254,7 +254,7 @@
 		(ready Si) (valoracionMin ?valoracionMin_) (version ?version_))
 	?appRecomendada_ <- (appRecomendada (id ?id_) (nombre "") (posPodium ?posPodium_))
 	?aplicacion_ <- (aplicacion (nombre ?nombreApp_) (valoracion ?valoracion_) (reviews ?reviews_) (espacio ?espacioApp_) (descargas ?descargasApp_)
-		(precio ?precio_) (ultimaActualizacion ?ultimaActualizacion_) (androidVersion ?androidVersion_) (genero ?generoApp_) (edad ?edadApp_))
+		(precio ?precio_) (androidVersion ?androidVersion_) (genero ?generoApp_) (edad ?edadApp_))
 	
 	(test (not (member$ ?nombreApp_ ?aplicacionesInstaladas_)))
 	(test (or (> (str-compare ?version_ ?androidVersion_) 0) (eq ?androidVersion_ "Varies with device")))
