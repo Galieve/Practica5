@@ -98,7 +98,6 @@
 	(bind ?edad (readline))
 	(printout t "Introduzca el año de su teléfono móvil: ")
 	(bind ?version (str-cat "\""(convertirAñoVersion(readline)) "\""))
-	(printout t ?version crlf)
 	(printout t "Perfil creado con éxito." crlf )
 	(printout t "Si quiere instalar alguna aplicación o indicar las ya instaladas utilice el comando instalar seguido de su identificador y el nombre de la aplicación" crlf)
 	(assert-string (str-cat 
