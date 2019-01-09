@@ -1,8 +1,4 @@
-
-
-
-
-(deffunction menu ()
+(deffunction menuPeticion ()
 	(printout t "Las opciones permitidas son:" crlf )
 	(printout t "1: Especificar el género de la recomendación." crlf)
 	(printout t "2: Deteriminar la edad del usuario final de la aplicación." crlf)
@@ -27,7 +23,7 @@
 	(bind ?valoracionMinPeticion -1)
 	(bind ?cantidadRecom_ 3)
 	(while (neq ?menu 0) do
-		(menu)
+		(menuPeticion)
 		(bind ?menu (read))
 		(if (eq ?menu 1) then 
 			(printout t "Escriba el género: ")
@@ -65,4 +61,48 @@
 		") (prioridad " ?prioridadPeticion ") (espacio " ?espacioPeticion ") (valoracionMin " 
 		?valoracionMinPeticion ") (cantidadRecom " ?cantidadRecom_"))"
 	))
+)
+
+;---Si un movil es del año x, su versión de android es, como mínimo, la más moderna del año anterior. 
+;Un télefono del año 2010 o anterior está ya descatalogado. Suponemos que a lo sumo es de 2010.
+(deffunction convertirAñoVersion (?año)
+(bind ?año (string-to-field ?año))
+	(if (> ?año 2018) then (return "9.0")
+	else (if (eq ?año 2018) then (return "8.1")
+		else (if (eq ?año 2017) then (return "7.1.2")
+			else (if (eq ?año 2016) then (return "6.0.1")
+				else (if (eq ?año 2015) then (return "5.1.1")
+					else (if (eq ?año 2014) then (return "4.4W2")
+						else (if (eq ?año 2013) then (return "4.3.1")
+							else (if (eq ?año 2012) then (return "4.0.5")
+								else (if (eq ?año 2011) then (return "2.3.7")
+									else (return "2.1")
+									)
+								)
+							)
+						)
+					)
+				)
+			)
+		)
+	)
+)
+
+(deffunction perfil ()
+	(printout t "Bienvenido al gestor de peticiones." crlf)
+	(printout t "Escriba su identificador: ")
+	(bind ?id_ (str-cat "\""(readline) "\""))
+	(printout t "Escriba su género (hombre mujer u otro): ")
+	(bind ?sexo (readline))
+	(printout t "Introduzca su edad: ")
+	(bind ?edad (readline))
+	(printout t "Introduzca el año de su teléfono móvil: ")
+	(bind ?version (str-cat "\""(convertirAñoVersion(readline)) "\""))
+	(printout t ?version crlf)
+	(printout t "Perfil creado con éxito." crlf )
+	(printout t "Si quiere instalar alguna aplicación o indicar las ya instaladas utilice el comando instalar seguido de su identificador y el nombre de la aplicación" crlf)
+	(assert-string (str-cat 
+		"(perfil (id " ?id_ ") (edad " ?edad ") (sexo " ?sexo ") (version " ?version ") )"
+	))
+
 )

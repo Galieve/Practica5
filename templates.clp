@@ -2,9 +2,6 @@
 
 (deftemplate aplicacion
     (slot nombre (type STRING))
-    (slot categoria (type SYMBOL) (allowed-values ART_AND_DESIGN AUTO_AND_VEHICLES BEAUTY BOOKS_AND_REFERENCE BUSINESS COMICS COMMUNICATION DATING EDUCATION 
-		ENTERTAINMENT EVENTS FAMILY FINANCE FOOD_AND_DRINK GAME HEALTH_AND_FITNESS HOUSE_AND_HOME LIBRARIES_AND_DEMO LIFESTYLE MAPS_AND_NAVIGATION MEDICAL 
-		NEWS_AND_MAGAZINES PARENTING PERSONALIZATION PHOTOGRAPHY PRODUCTIVITY SHOPPING SOCIAL SPORTS TOOLS TRAVEL_AND_LOCAL VIDEO_PLAYERS WEATHER))
     (slot valoracion (type NUMBER) (range 0 5))
 	(slot reviews (type INTEGER) (range 0 ?VARIABLE))
 	(slot espacio (type INTEGER) (range -1 ?VARIABLE)) ;-1 significa tamaño desconocido
@@ -16,7 +13,6 @@
 		HealthAndFitness HouseAndHome LibrariesAndDemo Lifestyle MapsAndNavigation Medical Music MusicAndAudio NewsAndMagazines 
 		Parenting Personalization Photography Productivity Puzzle Racing RolePlaying Shopping Simulation Social Sports Strategy 
 		Tools TravelAndLocal Trivia VideoPlayersAndEditors Weather Word ))
-	(slot ultimaActualizacion (type SYMBOL))
 	(slot androidVersion (type STRING))
 )
 

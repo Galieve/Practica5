@@ -1,5 +1,6 @@
 (defrule crearRecomendacion
 	?peticion_ <- (peticion (id ?id_) (satisfecha No) (listaApps $?listaApps_))
+	(perfil (id ?id_)) ;La petición debe estar ligada a un perfil concreto.
 	(test (eq (length$ $?listaApps_) 0))
 =>
 	(assert (recomendacion (id ?id_)))
