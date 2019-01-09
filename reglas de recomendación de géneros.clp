@@ -200,6 +200,22 @@
 	(modify ?recomendacion_ (genero $?generoRec_))
 )
 
+(defrule recomendarTodos
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?generoRec_) (ready No))
+	(test (member$ All $?generoRec_))
+=>
+	(bind $?generoRec_ (delete-member$ $?generoRec_ All))
+	(bind $?generoRec_ (insertListElementoUnico 
+		(create$ Action Adventure Arcade ArtAndDesign AutoAndVehicles Beauty Board BooksAndReference
+		Business Card Casino Casual Comics Communication Dating Education Educational Entertainment Events Finance FoodAndDrink 
+		HealthAndFitness HouseAndHome LibrariesAndDemo Lifestyle MapsAndNavigation Medical Music MusicAndAudio NewsAndMagazines 
+		Parenting Personalization Photography Productivity Puzzle Racing RolePlaying Shopping Simulation Social Sports Strategy 
+		Tools TravelAndLocal Trivia VideoPlayersAndEditors Weather Word)
+		?generoRec_))
+	(modify ?recomendacion_ (genero $?generoRec_))
+)
+
+
 
 
 (defrule recomendarGeneroUltimasAppsInstaladas

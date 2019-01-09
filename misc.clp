@@ -9,7 +9,7 @@
 (defrule crearAppRecomendada
 	?appRecomendada_ <- (appRecomendada (id ?id_) (nombre ?nombre_&:(neq ?nombre_ "")) (posPodium ?posPodium_))
 	?peticion_ <- (peticion (id ?id_) (cantidadRecom ?cantidadRecom_) (satisfecha No))
-	(not (exists (appRecomendada (id ?id_) (posPodium ?posPodium2_)) (test(> ?posPodium2_ ?posPodium_))))
+	(not (appRecomendada (id ?id_) (posPodium ?posPodium2_&:(> ?posPodium2_ ?posPodium_))))
 	(test(< ?posPodium_ ?cantidadRecom_))
 =>
 	(assert (appRecomendada (id ?id_) (posPodium	(+ ?posPodium_ 1) )))

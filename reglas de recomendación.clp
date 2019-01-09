@@ -130,7 +130,7 @@
 	(modify ?recomendacion_ (ready Si))
 	(assert (appRecomendada (id ?id_) (posPodium 1)))
 )
-;-------------------------------------------------------------------------
+;----------------------Seleccionar la mejor aplicación-------------------------
 
 
 (defrule appRecomendadaDescargas
@@ -151,32 +151,35 @@
 	(test(<= ?precio_ ?precioMax_))
 	(test (member$ ?generoApp_ ?genero_))
 	(test(or	
-		(and (eq ?espacio_ ligera ) (or(<= ?espacioApp_ 3000000) (> ?espacioApp_ 0)))		
-		(and (eq ?espacio_ medio  ) (or(<= ?espacioApp_ 15000000) (> ?espacioApp_ 0)))	
+		(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 15000000) (> ?espacioApp_ 0))		
+		(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 50000000) (> ?espacioApp_ 0))	
 		(eq ?espacio_ pesada)
 	))
 	
-	(forall
+	(not
 		(aplicacion 
 			(nombre ?nombreApp_2&:
 				(and(not (member$ ?nombreApp_2 $?aplicacionesInstaladas_))(neq ?nombreApp_2 ?nombreApp_) (not (member$ ?nombreApp_2 $?listaApps_)) )) 
 			(reviews ?reviews_2&:(>= ?reviews_2 5000)) 
-			(valoracion ?valoracion_2&:(>= ?valoracion_2 ?valoracionMin_)) 
+			(valoracion ?valoracion_2&:(>= ?valoracion_2 ?valoracionMin_))
+			(precio ?precio_2&:(<= ?precio_2 ?precioMax_))
+			
 			(espacio ?espacioApp_2&:(or 
-				(and (eq ?espacio_ ligera ) (or(<= ?espacioApp_ 3000000) (> ?espacioApp_ 0)))		
-			(and (eq ?espacio_ medio  ) (or(<= ?espacioApp_ 15000000) (> ?espacioApp_ 0)))
+				(and (eq ?espacio_ ligera ) (<= ?espacioApp_2 15000000) (> ?espacioApp_2 0))	
+				(and (eq ?espacio_ medio  ) (<= ?espacioApp_2 50000000) (> ?espacioApp_2 0))
 				(eq ?espacio_ pesada))) 
-			(descargas ?descargasApp_2&:(>= ?descargasApp_2 50000))
-			(precio ?precio_2&:(<= ?precio_2 ?precioMax_)) 
+			(descargas ?descargasApp_2&:(and				
+				(>= ?descargasApp_2 50000)
+				(or
+					(< ?descargasApp_ ?descargasApp_2)
+					(and (eq ?descargasApp_ ?descargasApp_2) (< ?valoracion_ ?valoracion_2))
+					(and (eq ?descargasApp_ ?descargasApp_2) (eq ?valoracion_ ?valoracion_2) (> ?espacioApp_ ?espacioApp_2))
+					(and (eq ?descargasApp_ ?descargasApp_2) (eq ?valoracion_ ?valoracion_2) (eq ?espacioApp_ ?espacioApp_2) (> ?precio_ ?precio_2))
+				)
+			))			 
 			(genero ?generoApp_2&:(member$ ?generoApp_2 ?genero_))
 			(edad ?edadApp_2&:(>= ?edad_ (conversionEdad_Num ?edadApp_2)))
 			(androidVersion ?androidVersion_2&:(> (str-compare ?version_ ?androidVersion_2)0))
-		)
-			
-		(test(or		
-				(> ?descargasApp_ ?descargasApp_2)	 
-				(and (eq ?descargasApp_ ?descargasApp_2) (>= ?valoracion_ ?valoracion_2))
-			)
 		)
 	)
 	(test (not (member$ ?nombreApp_ $?listaApps_)))
@@ -188,6 +191,7 @@
 	(modify ?appRecomendada_ (nombre ?nombreApp_)) 
 	
 )
+
 
 (defrule appRecomendadaValoraciones
 	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?aplicacionesInstaladas_))
@@ -208,32 +212,34 @@
 	(test (neq (member$ ?generoApp_ ?genero_) FALSE))
 
 	(test(or	
-		(and (eq ?espacio_ ligera ) (or(<= ?espacioApp_ 3000000) (> ?espacioApp_ 0)))		
-		(and (eq ?espacio_ medio  ) (or(<= ?espacioApp_ 15000000) (> ?espacioApp_ 0)))
+		(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 15000000) (> ?espacioApp_ 0))	
+		(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 50000000) (> ?espacioApp_ 0))
 		(eq ?espacio_ pesada)
 	))
 	
-	(forall
+	(not
 		(aplicacion 
 			(nombre ?nombreApp_2&:
 				(and(not (member$ ?nombreApp_2 $?aplicacionesInstaladas_))(neq ?nombreApp_2 ?nombreApp_) (not (member$ ?nombreApp_2 $?listaApps_)) )) 
 			(reviews ?reviews_2&:(>= ?reviews_2 5000)) 
 			(valoracion ?valoracion_2&:(>= ?valoracion_2 ?valoracionMin_)) 
 			(espacio ?espacioApp_2&:(or 
-				(and (eq ?espacio_ ligera ) (or(<= ?espacioApp_ 3000000) (> ?espacioApp_ 0)))		
-				(and (eq ?espacio_ medio  ) (or(<= ?espacioApp_ 15000000) (> ?espacioApp_ 0)))
-				(eq ?espacio_ pesada))) 
-			(descargas ?descargasApp_2&:(>= ?descargasApp_2 50000))
-			(precio ?precio_2&:(<= ?precio_2 ?precioMax_)) 
+				(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 15000000) (> ?espacioApp_2 0))		
+				(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 50000000) (> ?espacioApp_2 0))
+				(eq ?espacio_ pesada)))
+			(precio ?precio_2&:(<= ?precio_2 ?precioMax_)) 				
+			(descargas ?descargasApp_2&:(and
+				(>= ?descargasApp_2 50000)
+				(or		
+					(< ?valoracion_ ?valoracion_2)	 
+					(and (eq ?valoracion_ ?valoracion_2) (< ?descargasApp_ ?descargasApp_2))
+					(and (eq ?valoracion_ ?valoracion_2) (eq ?descargasApp_ ?descargasApp_2) (> ?espacioApp_ ?espacioApp_2))
+					(and (eq ?espacioApp_ ?espacioApp_2) (eq ?descargasApp_ ?descargasApp_2) (eq ?valoracion_ ?valoracion_2) (> ?precio_ ?precio_2))	
+				)
+			))
 			(genero ?generoApp_2&:(member$ ?generoApp_2 ?genero_))
 			(edad ?edadApp_2&:(>= ?edad_ (conversionEdad_Num ?edadApp_2)))
 			(androidVersion ?androidVersion_2&:(or (> (str-compare ?version_ ?androidVersion_2) 0) (eq ?androidVersion_ "Varies with device")))
-		)
-			
-		(test(or		
-				(> ?valoracion_ ?valoracion_2)	 
-				(and (eq ?valoracion_ ?valoracion_2) (>= ?descargasApp_ ?descargasApp_2))
-			)
 		)
 	)
 	(test (not (member$ ?nombreApp_ $?listaApps_)))	
@@ -262,33 +268,155 @@
 	
 	;--espacioApp = -1 => Varies with device => suponemos que la app es muy pesada 
 	(test(or	
-		(and (eq ?espacio_ ligera ) (or(<= ?espacioApp_ 3000000) (> ?espacioApp_ 0)))		
-		(and (eq ?espacio_ medio  ) (or(<= ?espacioApp_ 15000000) (> ?espacioApp_ 0)))	
+		(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 15000000) (> ?espacioApp_ 0))	
+		(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 50000000) (> ?espacioApp_ 0))
 		(eq ?espacio_ pesada)
 	))
-	
-	(forall
-		(aplicacion 
+	(not(aplicacion 
 			(nombre ?nombreApp_2&:
 				(and(not (member$ ?nombreApp_2 $?aplicacionesInstaladas_))(neq ?nombreApp_2 ?nombreApp_) (not (member$ ?nombreApp_2 $?listaApps_)) )) 
 			(reviews ?reviews_2&:(>= ?reviews_2 5000)) 
 			(valoracion ?valoracion_2&:(>= ?valoracion_2 ?valoracionMin_)) 
-			(espacio ?espacioApp_2&:(or 
-				(and (eq ?espacio_ ligera ) (or(<= ?espacioApp_ 3000000) (> ?espacioApp_ 0)))		
-				(and (eq ?espacio_ medio  ) (or(<= ?espacioApp_ 15000000) (> ?espacioApp_ 0)))
-				(eq ?espacio_ pesada))) 
 			(descargas ?descargasApp_2&:(>= ?descargasApp_2 50000))
 			(precio ?precio_2&:(<= ?precio_2 ?precioMax_)) 
+			(espacio ?espacioApp_2&:(and
+				(or 
+					(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 15000000) (> ?espacioApp_2 0))		
+					(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 50000000) (> ?espacioApp_2 0))
+					(eq ?espacio_ pesada)
+				)
+				(or		
+					(> ?espacioApp_ ?espacioApp_2)	 
+					(and (eq ?espacioApp_ ?espacioApp_2) (< ?descargasApp_ ?descargasApp_2))
+					(and (eq ?espacioApp_ ?espacioApp_2) (eq ?descargasApp_ ?descargasApp_2) (< ?valoracion_ ?valoracion_2))
+					(and (eq ?espacioApp_ ?espacioApp_2) (eq ?descargasApp_ ?descargasApp_2) (eq ?valoracion_ ?valoracion_2) (> ?precio_ ?precio_2))	
+
+
+				)
+			))
 			(genero ?generoApp_2&:(member$ ?generoApp_2 ?genero_))
 			(edad ?edadApp_2&:(>= ?edad_ (conversionEdad_Num ?edadApp_2)))
 			(androidVersion ?androidVersion_2&:(or (> (str-compare ?version_ ?androidVersion_2) 0) (eq ?androidVersion_ "Varies with device")))
 		)
-			
-		(test(or		
-				(> ?espacioApp_ ?espacioApp_2)	 
-				(and (eq ?espacioApp_ ?espacioApp_2) (>= ?valoracion_ ?valoracion_2))
-			)
+	
+	)
+	(test (not (member$ ?nombreApp_ $?listaApps_)))
+	
+=>
+	(modify ?peticion_ (listaApps (insert$ $?listaApps_ 1 ?nombreApp_)))
+	(modify ?appRecomendada_ (nombre ?nombreApp_)) 
+)
+
+(defrule appRecomendadaPrecioAsc
+	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?aplicacionesInstaladas_))
+	?peticion_ <- (peticion (id ?id_) (prioridad precioAsc) (listaApps $?listaApps_) (satisfecha No))
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_)
+		(ready Si) (valoracionMin ?valoracionMin_) (version ?version_))
+	?appRecomendada_ <- (appRecomendada (id ?id_) (nombre "") (posPodium ?posPodium_))
+	?aplicacion_ <- (aplicacion (nombre ?nombreApp_) (valoracion ?valoracion_) (reviews ?reviews_) (espacio ?espacioApp_) (descargas ?descargasApp_)
+		(precio ?precio_) (androidVersion ?androidVersion_) (genero ?generoApp_) (edad ?edadApp_))
+	
+	(test (not (member$ ?nombreApp_ ?aplicacionesInstaladas_)))
+	(test (or (> (str-compare ?version_ ?androidVersion_) 0) (eq ?androidVersion_ "Varies with device")))
+	(test(>= ?edad_ (conversionEdad_Num ?edadApp_)))
+	(test(>= ?descargasApp_ 50000))
+	(test(>= ?reviews_ 5000))
+	(test(>= ?valoracion_ ?valoracionMin_))
+	(test(<= ?precio_ ?precioMax_))
+	(test (neq (member$ ?generoApp_ ?genero_) FALSE))
+	
+	;--espacioApp = -1 => Varies with device => suponemos que la app es muy pesada 
+	(test(or	
+		(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 15000000) (> ?espacioApp_ 0))	
+		(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 50000000) (> ?espacioApp_ 0))
+		(eq ?espacio_ pesada)
+	))
+	(not(aplicacion 
+			(nombre ?nombreApp_2&:
+				(and(not (member$ ?nombreApp_2 $?aplicacionesInstaladas_))(neq ?nombreApp_2 ?nombreApp_) (not (member$ ?nombreApp_2 $?listaApps_)) )) 
+			(reviews ?reviews_2&:(>= ?reviews_2 5000)) 
+			(valoracion ?valoracion_2&:(>= ?valoracion_2 ?valoracionMin_)) 
+			(descargas ?descargasApp_2&:(>= ?descargasApp_2 50000))
+			(precio ?precio_2&:(<= ?precio_2 ?precioMax_)) 
+			(espacio ?espacioApp_2&:(and
+				(or 
+					(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 15000000) (> ?espacioApp_2 0))		
+					(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 50000000) (> ?espacioApp_2 0))
+					(eq ?espacio_ pesada)
+				)
+				(or	
+					(> ?precio_ ?precio_2)
+					(and (eq ?precio_ ?precio_2) (< ?descargasApp_ ?descargasApp_2))
+					(and (eq ?precio_ ?precio_2) (eq ?descargasApp_ ?descargasApp_2) (< ?valoracion_ ?valoracion_2))
+					(and (eq ?precio_ ?precio_2) (eq ?descargasApp_ ?descargasApp_2) (eq ?valoracion_ ?valoracion_2) (> ?espacioApp_ ?espacioApp_2))	
+
+
+				)
+			))
+			(genero ?generoApp_2&:(member$ ?generoApp_2 ?genero_))
+			(edad ?edadApp_2&:(>= ?edad_ (conversionEdad_Num ?edadApp_2)))
+			(androidVersion ?androidVersion_2&:(or (> (str-compare ?version_ ?androidVersion_2) 0) (eq ?androidVersion_ "Varies with device")))
 		)
+	
+	)
+	(test (not (member$ ?nombreApp_ $?listaApps_)))
+	
+=>
+	(modify ?peticion_ (listaApps (insert$ $?listaApps_ 1 ?nombreApp_)))
+	(modify ?appRecomendada_ (nombre ?nombreApp_)) 
+)
+
+(defrule appRecomendadaPrecioDesc
+	?perfil_ <- (perfil (id ?id_) (aplicacionesInstaladas $?aplicacionesInstaladas_))
+	?peticion_ <- (peticion (id ?id_) (prioridad precioDesc) (listaApps $?listaApps_) (satisfecha No))
+	?recomendacion_ <- (recomendacion (id ?id_) (genero $?genero_) (edadApp ?edad_) (espacio ?espacio_) (precioMaximo ?precioMax_)
+		(ready Si) (valoracionMin ?valoracionMin_) (version ?version_))
+	?appRecomendada_ <- (appRecomendada (id ?id_) (nombre "") (posPodium ?posPodium_))
+	?aplicacion_ <- (aplicacion (nombre ?nombreApp_) (valoracion ?valoracion_) (reviews ?reviews_) (espacio ?espacioApp_) (descargas ?descargasApp_)
+		(precio ?precio_) (androidVersion ?androidVersion_) (genero ?generoApp_) (edad ?edadApp_))
+	
+	(test (not (member$ ?nombreApp_ ?aplicacionesInstaladas_)))
+	(test (or (> (str-compare ?version_ ?androidVersion_) 0) (eq ?androidVersion_ "Varies with device")))
+	(test(>= ?edad_ (conversionEdad_Num ?edadApp_)))
+	(test(>= ?descargasApp_ 50000))
+	(test(>= ?reviews_ 5000))
+	(test(>= ?valoracion_ ?valoracionMin_))
+	(test(<= ?precio_ ?precioMax_))
+	(test (neq (member$ ?generoApp_ ?genero_) FALSE))
+	
+	;--espacioApp = -1 => Varies with device => suponemos que la app es muy pesada 
+	(test(or	
+		(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 15000000) (> ?espacioApp_ 0))	
+		(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 50000000) (> ?espacioApp_ 0))
+		(eq ?espacio_ pesada)
+	))
+	(not(aplicacion 
+			(nombre ?nombreApp_2&:
+				(and(not (member$ ?nombreApp_2 $?aplicacionesInstaladas_))(neq ?nombreApp_2 ?nombreApp_) (not (member$ ?nombreApp_2 $?listaApps_)) )) 
+			(reviews ?reviews_2&:(>= ?reviews_2 5000)) 
+			(valoracion ?valoracion_2&:(>= ?valoracion_2 ?valoracionMin_)) 
+			(descargas ?descargasApp_2&:(>= ?descargasApp_2 50000))
+			(precio ?precio_2&:(<= ?precio_2 ?precioMax_)) 
+			(espacio ?espacioApp_2&:(and
+				(or 
+					(and (eq ?espacio_ ligera ) (<= ?espacioApp_ 15000000) (> ?espacioApp_2 0))		
+					(and (eq ?espacio_ medio  ) (<= ?espacioApp_ 50000000) (> ?espacioApp_2 0))
+					(eq ?espacio_ pesada)
+				)
+				(or	
+					(< ?precio_ ?precio_2)
+					(and (eq ?precio_ ?precio_2) (< ?descargasApp_ ?descargasApp_2))
+					(and (eq ?precio_ ?precio_2) (eq ?descargasApp_ ?descargasApp_2) (< ?valoracion_ ?valoracion_2))
+					(and (eq ?precio_ ?precio_2) (eq ?descargasApp_ ?descargasApp_2) (eq ?valoracion_ ?valoracion_2) (> ?espacioApp_ ?espacioApp_2))	
+
+
+				)
+			))
+			(genero ?generoApp_2&:(member$ ?generoApp_2 ?genero_))
+			(edad ?edadApp_2&:(>= ?edad_ (conversionEdad_Num ?edadApp_2)))
+			(androidVersion ?androidVersion_2&:(or (> (str-compare ?version_ ?androidVersion_2) 0) (eq ?androidVersion_ "Varies with device")))
+		)
+	
 	)
 	(test (not (member$ ?nombreApp_ $?listaApps_)))
 	
